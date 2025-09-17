@@ -255,7 +255,7 @@ const ContactSection = () => (
         <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-start bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 shadow-2xl shadow-black/20">
           <div className="space-y-6">
             <p className="text-lg text-gray-300 font-light">
-              Have a question or want to work together? Send us a message, and we'll get back to you as soon as possible.
+              Have a question or want to work together? Send us a message, ... and we&apos;ll get back to you as soon as possible.
             </p>
             <div className="space-y-4">
               <a href="mailto:support@idraxiom.com" className="flex items-center text-gray-200 hover:text-cyan-400 transition-colors">
