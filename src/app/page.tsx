@@ -5,7 +5,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { BrainCircuit, Users, Timer, LayoutDashboard, BarChart3 } from "lucide-react";
+// CHANGE: Added new icons for the Services section
+import { BrainCircuit, Users, Timer, LayoutDashboard, BarChart3, PenTool, Network, Lightbulb, Database } from "lucide-react";
 
 // --- ANIMATION VARIANTS ---
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
@@ -44,6 +45,7 @@ export default function HomePage() {
         <HeroSection />
         <AboutSection />
         <TechnologiesSection />
+        <ServicesSection /> {/* CHANGE: Added new section */}
         <ProductsSection />
         <ContactSection />
       </main>
@@ -57,7 +59,9 @@ export default function HomePage() {
 // 1) Navbar
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navLinks = ["Home", "About", "Technologies", "Products", "Contact"];
+  // CHANGE: Added "Services" to nav links, though it won't be visible on the navbar itself yet.
+  // This is good practice if you decide to add it to the nav later.
+  const navLinks = ["Home", "About", "Technologies", "Services", "Products", "Contact"];
 
   const menuVariants = {
     hidden: { opacity: 0, scaleY: 0 },
@@ -76,7 +80,8 @@ const Navbar = () => {
         </motion.div>
 
         <div className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link) => (
+          {/* Filtering out "Services" from the visible desktop navbar for now */}
+          {navLinks.filter(l => l !== "Services").map((link) => (
             <motion.a key={link} href={`#${link.toLowerCase()}`} className="font-light hover:text-cyan-400 transition-colors duration-300" whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.95 }}>
               {link}
             </motion.a>
@@ -100,7 +105,7 @@ const Navbar = () => {
         {isOpen && (
           <motion.div variants={menuVariants} initial="hidden" animate="visible" exit="exit" className="md:hidden overflow-hidden origin-top">
             <div className="flex flex-col space-y-2 p-4 pt-0">
-              {navLinks.map((link) => (
+               {navLinks.filter(l => l !== "Services").map((link) => (
                 <a key={link} href={`#${link.toLowerCase()}`} className="text-center text-lg p-2 rounded-md hover:bg-white/5 transition-colors" onClick={() => setIsOpen(false)}>
                   {link}
                 </a>
@@ -206,7 +211,59 @@ const TechnologiesSection = () => {
   );
 };
 
-// 5) Products Section
+// 5) NEW: Services Section
+const ServicesSection = () => {
+  const serviceItems = [
+    {
+      icon: PenTool,
+      title: "UI/UX Design",
+      description: "Crafting intuitive and beautiful user interfaces that enhance user experience and engagement.",
+    },
+    {
+      icon: Network,
+      title: "System Analysis",
+      description: "Analyzing and defining system requirements to build robust and scalable software architecture.",
+    },
+    {
+      icon: Lightbulb,
+      title: "AI Solutions (Lite)",
+      description: "Integrating lightweight AI models to automate tasks and provide intelligent insights for your business.",
+    },
+    {
+      icon: Database,
+      title: "Big Data & Analytics (Lite)",
+      description: "Processing and analyzing large datasets to uncover trends and drive data-informed decisions.",
+    },
+  ];
+
+  return (
+    <section id="services" className="py-24 bg-[#0D1117]">
+      <div className="container mx-auto px-6 md:px-8">
+        <AnimatedSection>
+          <GradientHeading className="text-3xl md:text-4xl font-bold mb-16 text-center">Our Services</GradientHeading>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {serviceItems.map((service, index) => (
+              <motion.div
+                key={index}
+                className="group relative flex flex-col text-center items-center bg-white/5 p-8 rounded-2xl border border-white/10 transition-all duration-300 hover:border-cyan-400/50 hover:-translate-y-2"
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="absolute inset-0 bg-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-80 transition-opacity duration-300"></div>
+                <div className="relative z-10 flex flex-col items-center">
+                  <service.icon className="w-12 h-12 text-cyan-400 mb-5" strokeWidth={1.5} />
+                  <h3 className="text-xl font-bold text-gray-100 mb-3">{service.title}</h3>
+                  <p className="text-gray-400 font-light text-sm leading-relaxed">{service.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </AnimatedSection>
+      </div>
+    </section>
+  );
+};
+
+// 6) Products Section
 const ProductsSection = () => (
   <section id="products" className="py-24">
     <div className="container mx-auto text-center px-6 md:px-8">
@@ -217,7 +274,6 @@ const ProductsSection = () => (
           whileHover={{ y: -8, scale: 1.02, boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.3)" }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
-          {/* CHANGE: Replaced previous logo with the full Meeteazy logo */}
           <Image
             src="/brand/meeteazy-logo.png"
             alt="Meeteazy Official Logo"
@@ -228,7 +284,6 @@ const ProductsSection = () => (
           <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto font-light">
             Meeteazy is a smart scheduling platform designed to simplify how professionals manage their time, bookings, and client meetings.
           </p>
-          {/* CHANGE: Updated button to link to the official site and match theme */}
           <motion.a
             href="https://meeteazy.com"
             target="_blank"
@@ -246,55 +301,111 @@ const ProductsSection = () => (
   </section>
 );
 
-// 6) Contact Section
-const ContactSection = () => (
-  <section id="contact" className="py-24">
-    <div className="container mx-auto px-6 md:px-8">
-      <AnimatedSection>
-        <GradientHeading className="text-3xl md:text-4xl font-bold text-center mb-12">Get in Touch</GradientHeading>
-        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-start bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 shadow-2xl shadow-black/20">
-          <div className="space-y-6">
-            <p className="text-lg text-gray-300 font-light">
-              Have a question or want to work together? Send us a message, ... and we&apos;ll get back to you as soon as possible.
-            </p>
-            <div className="space-y-4">
-              <a href="mailto:support@idraxiom.com" className="flex items-center text-gray-200 hover:text-cyan-400 transition-colors">
-                <span className="text-cyan-400 mr-3 text-xl">📧</span>
-                <span>support@idraxiom.com</span>
-              </a>
-              <a href="mailto:sales@idraxiom.com" className="flex items-center text-gray-200 hover:text-cyan-400 transition-colors">
-                <span className="text-cyan-400 mr-3 text-xl">📧</span>
-                <span>sales@idraxiom.com</span>
-              </a>
-            </div>
-            <p className="text-sm text-gray-400 pt-4 border-t border-white/10">
-              Official Business Name: Idraxiom Establishment
-            </p>
-          </div>
-          <form className="space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">Name</label>
-              <input type="text" id="name" name="name" className="w-full bg-white/5 border border-white/20 rounded-lg py-2 px-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition" />
-            </div>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">Email</label>
-              <input type="email" id="email" name="email" className="w-full bg-white/5 border border-white/20 rounded-lg py-2 px-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition" />
-            </div>
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">Message</label>
-              <textarea id="message" name="message" rows={4} className="w-full bg-white/5 border border-white/20 rounded-lg py-2 px-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition"></textarea>
-            </div>
-            <motion.button type="submit" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 15 }} className="w-full bg-cyan-500 text-black font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]">
-              Send Message
-            </motion.button>
-          </form>
-        </div>
-      </AnimatedSection>
-    </div>
-  </section>
-);
+// 7) Contact Section (UPDATED)
+const ContactSection = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
 
-// 7) Footer
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      if (!response.ok) {
+        throw new Error(`Server responded with ${response.status}`);
+      }
+      alert("✅ Your message has been sent successfully");
+      setName('');
+      setEmail('');
+      setMessage('');
+    } catch (error) {
+      console.error("Form submission error:", error);
+      alert("❌ Failed to send message, please try again later");
+    }
+  };
+  
+  return (
+    <section id="contact" className="py-24">
+      <div className="container mx-auto px-6 md:px-8">
+        <AnimatedSection>
+          <GradientHeading className="text-3xl md:text-4xl font-bold text-center mb-12">Get in Touch</GradientHeading>
+          <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-start bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 shadow-2xl shadow-black/20">
+            <div className="space-y-6">
+              <p className="text-lg text-gray-300 font-light">
+                Have a question or want to work together? Send us a message, and we&apos;ll get back to you as soon as possible.
+              </p>
+              <div className="space-y-4">
+                {/* CHANGE: Removed the sales email link */}
+                <a href="mailto:support@idraxiom.com" className="flex items-center text-gray-200 hover:text-cyan-400 transition-colors">
+                  <span className="text-cyan-400 mr-3 text-xl">📧</span>
+                  <span>support@idraxiom.com</span>
+                </a>
+              </div>
+              <p className="text-sm text-gray-400 pt-4 border-t border-white/10">
+                Official Business Name: Idraxiom Establishment
+              </p>
+            </div>
+            
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">Name</label>
+                <input 
+                  type="text" 
+                  id="name" 
+                  name="name" 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="w-full bg-white/5 border border-white/20 rounded-lg py-2 px-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition" 
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full bg-white/5 border border-white/20 rounded-lg py-2 px-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition" 
+                />
+              </div>
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">Message</label>
+                <textarea 
+                  id="message" 
+                  name="message" 
+                  rows={4} 
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  required
+                  className="w-full bg-white/5 border border-white/20 rounded-lg py-2 px-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition"
+                ></textarea>
+              </div>
+              <motion.button 
+                type="submit" 
+                whileHover={{ scale: 1.05 }} 
+                whileTap={{ scale: 0.95 }} 
+                transition={{ type: "spring", stiffness: 400, damping: 15 }} 
+                className="w-full bg-cyan-500 text-black font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]"
+              >
+                Send Message
+              </motion.button>
+            </form>
+          </div>
+        </AnimatedSection>
+      </div>
+    </section>
+  );
+};
+
+
+// 8) Footer
 const Footer = () => (
   <footer className="py-8 border-t border-white/10">
     <div className="container mx-auto text-center text-gray-400 px-6 md:px-8">
