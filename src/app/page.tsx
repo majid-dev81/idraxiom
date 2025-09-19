@@ -4,9 +4,9 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link"; // IMPORTED: For client-side navigation
 import { motion, AnimatePresence } from "framer-motion";
-// CHANGE: Added new icons for the Services section
-import { BrainCircuit, Users, Timer, LayoutDashboard, BarChart3, PenTool, Network, Lightbulb, Database } from "lucide-react";
+import { BrainCircuit, Users, Timer, LayoutDashboard, BarChart3, PenTool, Network, Lightbulb, Database, ArrowRight } from "lucide-react"; // IMPORTED: ArrowRight icon
 
 // --- ANIMATION VARIANTS ---
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
@@ -45,7 +45,7 @@ export default function HomePage() {
         <HeroSection />
         <AboutSection />
         <TechnologiesSection />
-        <ServicesSection /> {/* CHANGE: Added new section */}
+        <ServicesSection />
         <ProductsSection />
         <ContactSection />
       </main>
@@ -59,8 +59,6 @@ export default function HomePage() {
 // 1) Navbar
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  // CHANGE: Added "Services" to nav links, though it won't be visible on the navbar itself yet.
-  // This is good practice if you decide to add it to the nav later.
   const navLinks = ["Home", "About", "Technologies", "Services", "Products", "Contact"];
 
   const menuVariants = {
@@ -80,7 +78,6 @@ const Navbar = () => {
         </motion.div>
 
         <div className="hidden md:flex items-center space-x-8">
-          {/* Filtering out "Services" from the visible desktop navbar for now */}
           {navLinks.filter(l => l !== "Services").map((link) => (
             <motion.a key={link} href={`#${link.toLowerCase()}`} className="font-light hover:text-cyan-400 transition-colors duration-300" whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.95 }}>
               {link}
@@ -91,7 +88,7 @@ const Navbar = () => {
         <div className="md:hidden">
           <button onClick={() => setIsOpen(!isOpen)} className="focus:outline-none z-50 relative">
             <motion.div animate={isOpen ? "open" : "closed"}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <svg width="24" height="24" viewBox="0 0 24" fill="none">
                 <motion.path stroke="currentColor" strokeWidth="2" strokeLinecap="round" variants={{ closed: { d: "M 2 6.5 L 22 6.5" }, open: { d: "M 4 18 L 20 6" } }} />
                 <motion.path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M 2 12.5 L 22 12.5" variants={{ closed: { opacity: 1 }, open: { opacity: 0 } }} transition={{ duration: 0.1 }} />
                 <motion.path stroke="currentColor" strokeWidth="2" strokeLinecap="round" variants={{ closed: { d: "M 2 18.5 L 22 18.5" }, open: { d: "M 4 6 L 20 18" } }} />
@@ -177,14 +174,14 @@ const AboutSection = () => (
   </section>
 );
 
-// 4) Technologies Section
+// 4) <<< UPDATED AND REDESIGNED SECTION >>>
 const TechnologiesSection = () => {
   const techItems = [
-    { icon: BrainCircuit, name: "AI Vision" },
-    { icon: Users, name: "People & Flow Analytics" },
-    { icon: Timer, name: "Queue & Service Monitoring" },
-    { icon: LayoutDashboard, name: "Table & Occupancy Tracking" },
-    { icon: BarChart3, name: "Conversion Insights" },
+    { icon: BrainCircuit, name: "AI Vision", href: "/demo-vision" },
+    { icon: Users, name: "People & Flow Analytics", href: "/demo-flow" },
+    { icon: Timer, name: "Queue & Service Monitoring", href: "/demo-queue" },
+    { icon: LayoutDashboard, name: "Table & Occupancy Tracking", href: "/demo-table" },
+    { icon: BarChart3, name: "Conversion Insights", href: "/demo-conversion" },
   ];
 
   return (
@@ -192,67 +189,25 @@ const TechnologiesSection = () => {
       <div className="container mx-auto text-center px-6 md:px-8">
         <AnimatedSection>
           <GradientHeading className="text-3xl md:text-4xl font-bold mb-16 text-center">Technologies We Master</GradientHeading>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-12">
-            {techItems.map((item, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+            {techItems.map((item) => (
               <motion.div
-                key={index}
-                className="group relative flex flex-col items-center gap-4 bg-white/5 p-6 rounded-xl border border-white/10 transition-all duration-300 hover:border-cyan-400/50 hover:-translate-y-2"
+                key={item.name}
+                className="group relative flex flex-col text-center items-center bg-white/5 p-8 rounded-2xl border border-white/10 transition-all duration-300 hover:border-cyan-400/50 hover:-translate-y-2"
                 whileHover={{ scale: 1.05 }}
               >
-                <div className="absolute inset-0 bg-cyan-500/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <item.icon className="w-16 h-16 text-cyan-400" strokeWidth={1.5} />
-                <h3 className="text-lg font-semibold text-gray-200 mt-2 text-center">{item.name}</h3>
-              </motion.div>
-            ))}
-          </div>
-        </AnimatedSection>
-      </div>
-    </section>
-  );
-};
-
-// 5) NEW: Services Section
-const ServicesSection = () => {
-  const serviceItems = [
-    {
-      icon: PenTool,
-      title: "UI/UX Design",
-      description: "Crafting intuitive and beautiful user interfaces that enhance user experience and engagement.",
-    },
-    {
-      icon: Network,
-      title: "System Analysis",
-      description: "Analyzing and defining system requirements to build robust and scalable software architecture.",
-    },
-    {
-      icon: Lightbulb,
-      title: "AI Solutions (Lite)",
-      description: "Integrating lightweight AI models to automate tasks and provide intelligent insights for your business.",
-    },
-    {
-      icon: Database,
-      title: "Big Data & Analytics (Lite)",
-      description: "Processing and analyzing large datasets to uncover trends and drive data-informed decisions.",
-    },
-  ];
-
-  return (
-    <section id="services" className="py-24 bg-[#0D1117]">
-      <div className="container mx-auto px-6 md:px-8">
-        <AnimatedSection>
-          <GradientHeading className="text-3xl md:text-4xl font-bold mb-16 text-center">Our Services</GradientHeading>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {serviceItems.map((service, index) => (
-              <motion.div
-                key={index}
-                className="group relative flex flex-col text-center items-center bg-white/5 p-8 rounded-2xl border border-white/10 transition-all duration-300 hover:border-cyan-400/50 hover:-translate-y-2"
-                whileHover={{ scale: 1.02 }}
-              >
                 <div className="absolute inset-0 bg-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-80 transition-opacity duration-300"></div>
-                <div className="relative z-10 flex flex-col items-center">
-                  <service.icon className="w-12 h-12 text-cyan-400 mb-5" strokeWidth={1.5} />
-                  <h3 className="text-xl font-bold text-gray-100 mb-3">{service.title}</h3>
-                  <p className="text-gray-400 font-light text-sm leading-relaxed">{service.description}</p>
+                
+                {/* Content wrapper for z-index and flex layout */}
+                <div className="relative z-10 flex flex-col items-center h-full">
+                  <item.icon className="w-14 h-14 text-cyan-400 mb-5" strokeWidth={1.5} />
+                  <h3 className="text-xl font-bold text-gray-100 mb-3">{item.name}</h3>
+
+                  {/* "See More" link pushed to the bottom */}
+                  <Link href={item.href} className="mt-auto pt-4 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors duration-300 flex items-center gap-2">
+                    See More
+                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Link>
                 </div>
               </motion.div>
             ))}
@@ -262,6 +217,71 @@ const ServicesSection = () => {
     </section>
   );
 };
+
+// 5) Services Section
+const ServicesSection = () => {
+  const serviceItems = [
+    {
+      icon: PenTool,
+      title: "UI/UX Design",
+      description: "Crafting intuitive and beautiful user interfaces that enhance user experience and engagement.",
+      href: "/demo-uiux",
+    },
+    {
+      icon: Network,
+      title: "System Analysis",
+      description: "Analyzing and defining system requirements to build robust and scalable software architecture.",
+      href: "/demo-system",
+    },
+    {
+      icon: Lightbulb,
+      title: "AI Solutions (Lite)",
+      description: "Integrating lightweight AI models to automate tasks and provide intelligent insights for your business.",
+      href: "/demo-ai",
+    },
+    {
+      icon: Database,
+      title: "Big Data & Analytics (Lite)",
+      description: "Processing and analyzing large datasets to uncover trends and drive data-informed decisions.",
+      href: "/demo",
+    },
+  ];
+
+  return (
+    <section id="services" className="py-24 bg-[#0D1117]">
+      <div className="container mx-auto px-6 md:px-8">
+        <AnimatedSection>
+          <GradientHeading className="text-3xl md:text-4xl font-bold mb-16 text-center">Our Services</GradientHeading>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {serviceItems.map((service) => (
+              <motion.div
+                key={service.title}
+                className="group relative flex flex-col text-center items-center bg-white/5 p-8 rounded-2xl border border-white/10 transition-all duration-300 hover:border-cyan-400/50 hover:-translate-y-2"
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="absolute inset-0 bg-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-80 transition-opacity duration-300"></div>
+                
+                {/* Content wrapper */}
+                <div className="relative z-10 flex flex-col items-center h-full">
+                  <service.icon className="w-12 h-12 text-cyan-400 mb-5" strokeWidth={1.5} />
+                  <h3 className="text-xl font-bold text-gray-100 mb-3">{service.title}</h3>
+                  <p className="text-gray-400 font-light text-sm leading-relaxed">{service.description}</p>
+
+                  {/* "See More" link pushed to the bottom */}
+                  <Link href={service.href} className="mt-auto pt-4 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors duration-300 flex items-center gap-2">
+                    See More
+                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </AnimatedSection>
+      </div>
+    </section>
+  );
+};
+
 
 // 6) Products Section
 const ProductsSection = () => (
@@ -278,7 +298,7 @@ const ProductsSection = () => (
             src="/brand/meeteazy-logo.png"
             alt="Meeteazy Official Logo"
             width={220}
-            height={60} // Adjust height based on your logo's aspect ratio
+            height={60}
             className="mx-auto mb-6 h-auto w-56"
           />
           <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto font-light">
@@ -301,7 +321,7 @@ const ProductsSection = () => (
   </section>
 );
 
-// 7) Contact Section (UPDATED)
+// 7) Contact Section
 const ContactSection = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -339,7 +359,6 @@ const ContactSection = () => {
                 Have a question or want to work together? Send us a message, and we&apos;ll get back to you as soon as possible.
               </p>
               <div className="space-y-4">
-                {/* CHANGE: Removed the sales email link */}
                 <a href="mailto:contact@idraxiom.com" className="flex items-center text-gray-200 hover:text-cyan-400 transition-colors">
                   <span className="text-cyan-400 mr-3 text-xl">📧</span>
                   <span>contact@idraxiom.com</span>
