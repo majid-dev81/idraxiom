@@ -340,9 +340,9 @@ const ContactSection = () => {
               </p>
               <div className="space-y-4">
                 {/* CHANGE: Removed the sales email link */}
-                <a href="mailto:support@idraxiom.com" className="flex items-center text-gray-200 hover:text-cyan-400 transition-colors">
+                <a href="mailto:contact@idraxiom.com" className="flex items-center text-gray-200 hover:text-cyan-400 transition-colors">
                   <span className="text-cyan-400 mr-3 text-xl">📧</span>
-                  <span>support@idraxiom.com</span>
+                  <span>contact@idraxiom.com</span>
                 </a>
               </div>
               <p className="text-sm text-gray-400 pt-4 border-t border-white/10">

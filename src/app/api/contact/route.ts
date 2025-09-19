@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       port: 465,
       secure: true,
       auth: {
-        user: "support@idraxiom.com",
+        user: "contact@idraxiom.com",
         pass: process.env.ZOHO_APP_PASSWORD,
       },
     });
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
         secure: false,
         requireTLS: true,
         auth: {
-          user: "support@idraxiom.com",
+          user: "contact@idraxiom.com",
           pass: process.env.ZOHO_APP_PASSWORD,
         },
       });
@@ -47,8 +47,8 @@ export async function POST(request: Request) {
 
     // خيارات الإيميل
     const mailOptions = {
-      from: '"Idraxiom Website" <support@idraxiom.com>',
-      to: "support@idraxiom.com",
+      from: '"Idraxiom Website" <contact@idraxiom.com>',
+      to: "contact@idraxiom.com",
       replyTo: email,
       subject: `New message from ${name}`,
       text: `You have a new message from:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
