@@ -82,7 +82,7 @@ export default function DemoQueuePage() {
       setSimulationTime(prevTime => prevTime + 1);
 
       setQueue(currentQueue => {
-        let queueAfterServing = [...currentQueue];
+        const queueAfterServing = [...currentQueue];
 
         // Serve someone
         if (queueAfterServing.length > 0 && Math.random() < SERVE_PERSON_CHANCE) {

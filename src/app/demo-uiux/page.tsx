@@ -291,7 +291,7 @@ function CtaSection() {
                 Ready to Build Something Amazing?
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
-                Let's collaborate to turn your ideas into stunning, high-performance web applications.
+                Let&apos;s collaborate to turn your ideas into stunning, high-performance web applications.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
                  <motion.button

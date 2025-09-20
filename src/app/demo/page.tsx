@@ -112,13 +112,26 @@ const AnalyticsChartCard = ({ title, icon: Icon, children }: { title: string, ic
   </div>
 );
 
+// Manually define the types for the custom tooltip payload and props
+interface CustomPayload {
+  name: string;
+  value: number;
+  color: string;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: CustomPayload[];
+  label?: string;
+}
+
 // Custom Tooltip for Recharts
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-slate-800 p-3 rounded-md border border-slate-700 shadow-lg">
         <p className="text-sm text-slate-300 font-medium">{`Date: ${label}`}</p>
-        {payload.map((pld: any, index: number) => (
+        {payload.map((pld, index: number) => (
           <p key={index} style={{ color: pld.color }} className="text-sm">
             {`${pld.name}: ${pld.value.toLocaleString()}`}
           </p>
