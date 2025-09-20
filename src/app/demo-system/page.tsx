@@ -6,7 +6,8 @@ import React, { useState } from 'react';
 import type { FC } from 'react';
 import { motion, type Transition } from 'framer-motion';
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { Layers, Activity, Clock, AlertTriangle, Cpu, Database, Server, ChevronRight } from 'lucide-react';
+// Added ChevronDown for the responsive architecture diagram
+import { Layers, Activity, Clock, AlertTriangle, Cpu, Database, Server, ChevronRight, ChevronDown } from 'lucide-react';
 
 // --- MOCK DATA FOR CHARTS ---
 
@@ -45,10 +46,10 @@ interface KpiCardProps {
  */
 const KpiCard: FC<KpiCardProps> = ({ title, value, icon: Icon, borderColor }) => (
   <motion.div
-    className="relative p-6 rounded-xl bg-[#161B22] border border-transparent overflow-hidden"
+    // RESPONSIVE CHANGE: Adjusted padding for smaller screens
+    className="relative p-4 sm:p-6 rounded-xl bg-[#161B22] border border-transparent overflow-hidden"
     whileHover={{ y: -5, boxShadow: `0 0 20px ${borderColor}` }}
     style={{
-      // Creates a glowing gradient border effect
       backgroundImage: `
         linear-gradient(to right, #161B22, #161B22), 
         linear-gradient(90deg, #00A9FF, #A076F9, #16a34a)
@@ -60,7 +61,8 @@ const KpiCard: FC<KpiCardProps> = ({ title, value, icon: Icon, borderColor }) =>
     <div className="flex items-center justify-between">
       <div>
         <p className="text-gray-400 text-sm">{title}</p>
-        <p className="text-3xl font-bold text-white">{value}</p>
+        {/* RESPONSIVE CHANGE: Adjusted font size for the value */}
+        <p className="text-2xl sm:text-3xl font-bold text-white">{value}</p>
       </div>
       <Icon className="h-8 w-8 text-cyan-400" />
     </div>
@@ -90,10 +92,9 @@ const ArchitectureDiagram = () => {
   };
 
   const pulseAnimation = {
-    scale: [1, 1.1, 1],
+    scale: [1, 1.05, 1],
   };
 
-  // Explicitly typing the transition object fixes the TypeScript error.
   const transition: Transition = {
     duration: 2,
     repeat: Infinity,
@@ -104,9 +105,12 @@ const ArchitectureDiagram = () => {
     <motion.div
       animate={pulseAnimation}
       transition={{ ...transition, duration: 1.5 }}
-      className="flex items-center"
+      className="flex items-center justify-center" // Centered the arrow
     >
-      <ChevronRight className="h-10 w-10 text-gray-500 mx-2 sm:mx-4" />
+      {/* RESPONSIVE CHANGE: Show a down arrow on mobile screens */}
+      <ChevronDown className="h-8 w-8 text-gray-500 my-1 md:hidden" />
+      {/* RESPONSIVE CHANGE: Show a right arrow on medium screens and up */}
+      <ChevronRight className="h-10 w-10 text-gray-500 mx-2 hidden md:flex" />
     </motion.div>
   );
 
@@ -114,15 +118,20 @@ const ArchitectureDiagram = () => {
     <motion.div
       animate={glowAnimation}
       transition={{ ...transition, delay }}
-      className="flex flex-col items-center justify-center text-center p-4 rounded-lg bg-[#161B22] border border-gray-700 w-full"
+      // RESPONSIVE CHANGE: Use flex-row on small screens and flex-col on medium+
+      // This pairs the icon and label horizontally on mobile for better space usage.
+      className="flex flex-row items-center justify-center md:flex-col text-center p-4 rounded-lg bg-[#161B22] border border-gray-700 w-full"
     >
-      <Icon className="h-10 w-10 mb-2 text-cyan-400" />
+      {/* RESPONSIVE CHANGE: Adjusted icon margin */}
+      <Icon className="h-8 w-8 md:h-10 md:w-10 mb-0 md:mb-2 mr-3 md:mr-0 text-cyan-400" />
       <span className="font-semibold text-sm sm:text-base">{label}</span>
     </motion.div>
   );
 
   return (
-    <div className="flex items-center justify-between bg-[#0D1117] p-6 rounded-lg border border-gray-800">
+    // RESPONSIVE CHANGE: Stack vertically on mobile, horizontally on desktop
+    // Added gap for spacing when stacked vertically
+    <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between bg-[#0D1117] p-4 sm:p-6 rounded-lg border border-gray-800 gap-4 md:gap-0">
       <Block icon={Cpu} label="Client" delay={0} />
       <Arrow />
       <Block icon={Server} label="API Gateway" delay={0.5} />
@@ -140,29 +149,31 @@ const ArchitectureDiagram = () => {
  * This is the primary component for the /demo-system route.
  */
 export default function SystemAnalysisPage() {
-  // State to simulate changing response time for the alert
   const [avgResponseTime, setAvgResponseTime] = useState(220);
   
-  // A simple toggle to demonstrate the conditional alert
   const toggleLatency = () => {
     setAvgResponseTime(prev => (prev > 500 ? 220 : 650));
   };
 
   return (
     <div className="bg-[#0D1117] min-h-screen text-white p-4 sm:p-6 lg:p-8 font-sans">
-      <div className="max-w-7xl mx-auto space-y-12">
+      {/* RESPONSIVE CHANGE: Increased vertical spacing for better separation */}
+      <div className="max-w-7xl mx-auto space-y-16">
         
         {/* --- HEADER --- */}
         <header className="text-center">
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent pb-2">
+          {/* RESPONSIVE CHANGE: Adjusted heading font size for mobile */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent pb-2">
             System Analysis – Demo
           </h1>
-          <p className="text-gray-400 max-w-2xl mx-auto mt-2">
+           {/* RESPONSIVE CHANGE: Adjusted paragraph font size and padding */}
+          <p className="text-gray-400 max-w-2xl mx-auto mt-4 text-base sm:text-lg">
             Analyzing and defining system requirements to build robust and scalable software architecture.
           </p>
         </header>
 
         {/* --- KPI CARDS --- */}
+        {/* This grid was already responsive, no major changes needed here */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <KpiCard title="Active Modules" value="42" icon={Layers} borderColor="rgba(0, 169, 255, 0.5)" />
           <KpiCard title="System Health" value="98%" icon={Activity} borderColor="rgba(22, 163, 74, 0.5)" />
@@ -172,7 +183,7 @@ export default function SystemAnalysisPage() {
 
         {/* --- ARCHITECTURE DIAGRAM --- */}
         <section>
-          <h2 className="text-2xl font-bold mb-4">System Architecture</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">System Architecture</h2>
           <ArchitectureDiagram />
         </section>
 
@@ -182,17 +193,19 @@ export default function SystemAnalysisPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0, scale: [1, 1.02, 1] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-            className="flex items-center justify-center p-4 bg-red-900/50 border border-red-500 rounded-lg"
+            // RESPONSIVE CHANGE: Adjusted text size and padding for mobile
+            className="flex items-center justify-center text-center p-4 bg-red-900/50 border border-red-500 rounded-lg"
           >
-            <AlertTriangle className="h-6 w-6 text-red-400 mr-3" />
-            <p className="font-semibold text-red-300">High Latency Detected on Service B</p>
+            <AlertTriangle className="h-6 w-6 text-red-400 mr-3 flex-shrink-0" />
+            <p className="font-semibold text-red-300 text-sm sm:text-base">High Latency Detected on Service B</p>
           </motion.div>
         )}
         
         {/* --- CHARTS --- */}
+        {/* RESPONSIVE CHANGE: This grid now stacks on mobile and becomes 2-column on large screens. */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Response Time Chart */}
-          <div className="bg-[#161B22] p-6 rounded-lg border border-gray-800">
+          <div className="bg-[#161B22] p-4 sm:p-6 rounded-lg border border-gray-800">
             <h3 className="text-lg font-semibold mb-4">Response Time (ms)</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={responseTimeData}>
@@ -203,8 +216,8 @@ export default function SystemAnalysisPage() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis dataKey="name" stroke="#9CA3AF" />
-                <YAxis stroke="#9CA3AF" />
+                <XAxis dataKey="name" stroke="#9CA3AF" tick={{ fontSize: 12 }} />
+                <YAxis stroke="#9CA3AF" tick={{ fontSize: 12 }} />
                 <Tooltip contentStyle={{ backgroundColor: '#161B22', border: '1px solid #374151' }} />
                 <Line type="monotone" dataKey="time" stroke="#A076F9" strokeWidth={2} dot={false} />
               </LineChart>
@@ -212,7 +225,7 @@ export default function SystemAnalysisPage() {
           </div>
 
           {/* Requests Per Service Chart */}
-          <div className="bg-[#161B22] p-6 rounded-lg border border-gray-800">
+          <div className="bg-[#161B22] p-4 sm:p-6 rounded-lg border border-gray-800">
             <h3 className="text-lg font-semibold mb-4">Requests Handled Per Service</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={requestsData}>
@@ -223,8 +236,8 @@ export default function SystemAnalysisPage() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis dataKey="name" stroke="#9CA3AF" />
-                <YAxis stroke="#9CA3AF" />
+                <XAxis dataKey="name" stroke="#9CA3AF" tick={{ fontSize: 12 }} />
+                <YAxis stroke="#9CA3AF" tick={{ fontSize: 12 }} />
                 <Tooltip contentStyle={{ backgroundColor: '#161B22', border: '1px solid #374151' }} />
                 <Bar dataKey="requests" fill="url(#colorRequests)" />
               </BarChart>
@@ -236,7 +249,7 @@ export default function SystemAnalysisPage() {
          <div className="text-center pt-4">
             <button
                 onClick={toggleLatency}
-                className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition-all"
+                className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-all text-base"
             >
                 Toggle High Latency Alert
             </button>
