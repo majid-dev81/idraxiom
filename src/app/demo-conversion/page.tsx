@@ -1,210 +1,349 @@
 "use client";
 
-import { useState, useEffect, FC, ReactNode } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Car, Users, Briefcase, Video, Target, BarChart2, LucideIcon } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import React, { useMemo } from "react";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  // TooltipProps is removed as we define our own to avoid conflicts
+} from "recharts";
+import {
+  Users,
+  ShoppingCart,
+  Percent,
+  DollarSign,
+  TrendingUp,
+  AlertTriangle,
+} from "lucide-react";
 
-// --- TYPE DEFINITIONS for strict TypeScript ---
-
-type DetectionType = {
-  label: string;
-  icon: LucideIcon;
-};
-
-type Detection = {
-  id: number;
-  label: string;
-  confidence: number;
-  icon: LucideIcon;
-  x: number;
-  y: number;
-  size: number;
-  duration: number;
-};
-
-type ChartData = {
-  time: string;
-  people: number;
-};
-
+// =============== Types ===============
 type KpiCardProps = {
-  icon: LucideIcon;
   title: string;
-  value: string;
-  unit: string;
-  color: 'cyan' | 'violet' | 'lime';
+  value: string | number;
+  icon: React.ElementType;
+  accent?: "cyan" | "violet" | "lime" | "orange";
 };
 
-// --- CONSTANTS for easy configuration ---
+type DayData = {
+  day: string;
+  visitors: number;
+  orders: number;
+  revenue: number; // SAR
+};
 
-const DETECTION_TYPES: DetectionType[] = [
-  { label: 'Person', icon: Users },
-  { label: 'Car', icon: Car },
-  { label: 'Backpack', icon: Briefcase },
-];
-const MAX_DETECTIONS = 15;
-const DETECTION_INTERVAL_MS = 1500;
-const MAX_CHART_POINTS = 20;
+type FunnelStage = {
+  name: string;
+  count: number;
+};
 
-// --- MAIN PAGE COMPONENT ---
+type ConversionTrend = {
+  day: string;
+  rate: number;
+};
 
-export default function VisionPage() {
-  const [detections, setDetections] = useState<Detection[]>([]);
-  const [chartData, setChartData] = useState<ChartData[]>([]);
-  const [peopleCount, setPeopleCount] = useState(0);
-
-  // This useEffect hook simulates a live feed by generating new detections
-  // and updating the chart data at regular intervals.
-  useEffect(() => {
-    const generateDetections = () => {
-      // 1. Create a new detection with random properties
-      const type = DETECTION_TYPES[Math.floor(Math.random() * DETECTION_TYPES.length)];
-      const newDetection: Detection = {
-        id: Date.now(),
-        label: type.label,
-        icon: type.icon,
-        confidence: Math.random() * (0.99 - 0.85) + 0.85,
-        x: Math.random() * 90,
-        y: Math.random() * 90,
-        size: Math.floor(Math.random() * (120 - 70) + 70),
-        duration: Math.random() * (8 - 4) + 4, // Random duration for animation
-      };
-
-      // 2. Update the detections state, ensuring it doesn't grow infinitely
-      setDetections(prev => 
-        [...prev, newDetection].slice(-MAX_DETECTIONS)
-      );
-
-      // 3. Update people count and chart data if a 'Person' is detected
-      if (type.label === 'Person') {
-        const newCount = peopleCount + 1;
-        setPeopleCount(newCount);
-        
-        const newTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit'});
-        const newEntry = { time: newTime, people: newCount };
-        
-        setChartData(prev => 
-          [...prev, newEntry].slice(-MAX_CHART_POINTS)
-        );
-      }
-    };
-
-    const intervalId = setInterval(generateDetections, DETECTION_INTERVAL_MS);
-    return () => clearInterval(intervalId); // Cleanup on component unmount
-  }, [peopleCount]); // Rerun effect when peopleCount changes to get the latest value
-
-  return (
-    <main className="flex flex-col min-h-screen bg-gray-900 text-gray-200 p-4 sm:p-6 lg:p-8 font-sans">
-      <div className="flex flex-col gap-8 w-full max-w-7xl mx-auto">
-        
-        <header>
-          <h1 className="text-3xl font-bold tracking-wider bg-gradient-to-r from-cyan-300 to-violet-400 bg-clip-text text-transparent">
-            AI Vision Analytics
-          </h1>
-          <p className="text-gray-400 mt-1">Live demonstration of real-time object detection</p>
-        </header>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <KpiCard icon={Video} title="Cameras Active" value="1" unit="" color="cyan" />
-          <KpiCard icon={Users} title="People Detected" value={peopleCount.toString()} unit="Total" color="violet" />
-          <KpiCard icon={Target} title="Average Accuracy" value="96.8" unit="%" color="lime" />
-        </div>
-
-        {/* --- LIVE VISION FEED --- */}
-        <div className="w-full h-[500px] bg-black/40 rounded-lg overflow-hidden relative border border-cyan-500/20 shadow-inner shadow-black/50">
-          <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:36px_36px]"></div>
-          <AnimatePresence>
-            {detections.map((d) => <DetectedObject key={d.id} {...d} />)}
-          </AnimatePresence>
-        </div>
-        
-        {/* --- ANALYTICS CHART --- */}
-        <div className="w-full h-[300px] bg-gray-800/50 rounded-lg p-4 border border-violet-500/20">
-           <div className="flex items-center gap-2 mb-4">
-              <BarChart2 className="text-violet-400" size={20}/>
-              <h3 className="font-semibold text-violet-300">People Count Over Time</h3>
-           </div>
-           <ResponsiveContainer width="100%" height="85%">
-            <LineChart data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(128, 128, 128, 0.2)" />
-              <XAxis dataKey="time" stroke="#A0AEC0" tick={{ fill: '#A0AEC0', fontSize: 12 }} />
-              <YAxis stroke="#A0AEC0" allowDecimals={false} tick={{ fill: '#A0AEC0', fontSize: 12 }} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'rgba(26, 32, 44, 0.9)', 
-                  borderColor: 'rgba(128, 128, 128, 0.5)',
-                  color: '#E2E8F0',
-                  borderRadius: '0.5rem'
-                }}
-              />
-              <Line type="monotone" dataKey="people" stroke="#a78bfa" strokeWidth={2} dot={{ r: 4, fill: '#a78bfa' }} activeDot={{ r: 8, stroke: '#c4b5fd' }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-    </main>
-  );
+// --- FIX STARTS HERE ---
+// Define a specific interface for our custom tooltip's props
+// This avoids conflicts with the TooltipProps from the recharts library.
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: {
+    value: number;
+    // Payload can contain other properties, but we only need 'value'.
+  }[];
+  label?: string;
 }
+// --- FIX ENDS HERE ---
 
-// --- SUB-COMPONENTS ---
+// =============== Dummy Data ===============
+const byDay: DayData[] = [
+  { day: "Mon", visitors: 820, orders: 38, revenue: 4550 },
+  { day: "Tue", visitors: 910, orders: 42, revenue: 5120 },
+  { day: "Wed", visitors: 860, orders: 40, revenue: 4980 },
+  { day: "Thu", visitors: 980, orders: 55, revenue: 7025 },
+  { day: "Fri", visitors: 1200, orders: 70, revenue: 9100 },
+  { day: "Sat", visitors: 1100, orders: 64, revenue: 8280 },
+  { day: "Sun", visitors: 740, orders: 30, revenue: 3450 },
+];
 
-/**
- * KPI Card Component: Displays a key performance indicator with neon styling.
- */
-const KpiCard: FC<KpiCardProps> = ({ icon: Icon, title, value, unit, color }) => {
-  const styles = {
-    cyan: { container: 'border-cyan-500/30', glow: 'shadow-[0_0_20px_rgba(56,189,248,0.3)]', text: 'text-cyan-300', iconBg: 'bg-cyan-500/20' },
-    violet: { container: 'border-violet-500/30', glow: 'shadow-[0_0_20px_rgba(167,139,250,0.3)]', text: 'text-violet-300', iconBg: 'bg-violet-500/20' },
-    lime: { container: 'border-lime-500/30', glow: 'shadow-[0_0_20px_rgba(163,230,53,0.3)]', text: 'text-lime-300', iconBg: 'bg-lime-500/20' },
-  };
+const funnel: FunnelStage[] = [
+  { name: "Visitors", count: 5600 },
+  { name: "Product Views", count: 4100 },
+  { name: "Add to Cart", count: 2200 },
+  { name: "Checkout", count: 1500 },
+  { name: "Purchases", count: 1039 },
+];
+
+// =============== Helpers ===============
+const formatSAR = (n: number) =>
+  new Intl.NumberFormat("en-SA", {
+    style: "currency",
+    currency: "SAR",
+    maximumFractionDigits: 0,
+  }).format(n);
+
+const toPct = (n: number, digits = 1) => `${n.toFixed(digits)}%`;
+
+// =============== KPIs Hook ===============
+const useKpis = () => {
+  return useMemo(() => {
+    const totalVisitors = byDay.reduce((s, d) => s + d.visitors, 0);
+    const totalOrders = byDay.reduce((s, d) => s + d.orders, 0);
+    const totalRevenue = byDay.reduce((s, d) => s + d.revenue, 0);
+    const convRate = totalVisitors > 0 ? (totalOrders / totalVisitors) * 100 : 0;
+    const aov = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+
+    const withRate = byDay.map((d) => ({
+      ...d,
+      rate: d.visitors > 0 ? (d.orders / d.visitors) * 100 : 0,
+    }));
+    const bestDay = withRate.reduce(
+      (best, cur) => (cur.rate > best.rate ? cur : best),
+      withRate[0]
+    );
+
+    const largestDrop = (() => {
+      let maxDrop = 0;
+      let stage = "";
+      for (let i = 0; i < funnel.length - 1; i++) {
+        const from = funnel[i].count;
+        const to = funnel[i + 1].count;
+        const drop = from > 0 ? ((from - to) / from) * 100 : 0;
+        if (drop > maxDrop) {
+          maxDrop = drop;
+          stage = `${funnel[i].name} → ${funnel[i + 1].name}`;
+        }
+      }
+      return { stage, drop: maxDrop };
+    })();
+
+    return {
+      totalVisitors,
+      totalOrders,
+      totalRevenue,
+      convRate,
+      aov,
+      bestDay,
+      largestDrop,
+    };
+  }, []);
+};
+
+// =============== Components ===============
+const KpiCard: React.FC<KpiCardProps> = ({
+  title,
+  value,
+  icon: Icon,
+  accent = "cyan",
+}) => {
+  const accents = {
+    cyan: "from-cyan-500/20 to-cyan-500/5 border-cyan-500/30 text-cyan-300",
+    violet:
+      "from-violet-500/20 to-violet-500/5 border-violet-500/30 text-violet-300",
+    lime: "from-lime-500/20 to-lime-500/5 border-lime-500/30 text-lime-300",
+    orange:
+      "from-orange-500/20 to-orange-500/5 border-orange-500/30 text-orange-300",
+  } as const;
 
   return (
-    <div className={`flex items-center p-4 rounded-lg bg-gray-800/50 border ${styles[color].container} ${styles[color].glow}`}>
-      <div className={`p-3 rounded-md ${styles[color].iconBg}`}>
-        <Icon className={`w-6 h-6 text-white ${styles[color].text}`} />
+    <div
+      className={`bg-gradient-to-br ${accents[accent]} rounded-xl p-5 border shadow-lg flex items-center justify-between`}
+    >
+      <div>
+        <p className="text-sm text-slate-400">{title}</p>
+        <p className="text-2xl md:text-3xl font-bold mt-1">{value}</p>
       </div>
-      <div className="ml-4">
-        <p className="text-sm text-gray-400">{title}</p>
-        <p className={`text-2xl font-bold ${styles[color].text}`}>
-          {value} <span className="text-base font-normal text-gray-300">{unit}</span>
-        </p>
+      <div className="p-3 rounded-md bg-white/5">
+        <Icon className="w-6 h-6" />
       </div>
     </div>
   );
 };
 
-/**
- * Detected Object Component: Renders a single, animated detection with a bounding box.
- */
-const DetectedObject: FC<Detection> = ({ label, confidence, icon: Icon, x, y, size, duration }) => {
-    const confidenceColor = confidence > 0.95 ? 'text-lime-400' : 'text-yellow-400';
-
-    return (
-        <motion.div
-            className="absolute flex flex-col items-center"
-            style={{ left: `${x}%`, top: `${y}%`, width: size, height: size }}
-            initial={{ opacity: 0, scale: 0.3 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.3 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-        >
-            <motion.div
-                className="w-full h-full border-2 border-cyan-400 rounded-md bg-cyan-500/10 flex items-center justify-center relative shadow-[0_0_15px_rgba(56,189,248,0.5)]"
-                animate={{
-                    x: [0, Math.random() * 20 - 10, 0], // Random micro-movements
-                    y: [0, Math.random() * 20 - 10, 0],
-                }}
-                transition={{ duration, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}
-            >
-                <Icon className="w-1/2 h-1/2 text-cyan-200" style={{ filter: 'drop-shadow(0 0 8px currentColor)' }} />
-            </motion.div>
-            <div className="mt-2 px-2 py-1 bg-black/70 rounded text-xs text-center whitespace-nowrap backdrop-blur-sm">
-                <span className="font-bold text-white">{label}</span>
-                <span className={`ml-2 font-mono ${confidenceColor}`}>
-                    {(confidence * 100).toFixed(1)}%
-                </span>
-            </div>
-        </motion.div>
-    );
+const FunnelBar: React.FC<{ stage: FunnelStage; max: number }> = ({
+  stage,
+  max,
+}) => {
+  const pct = max > 0 ? (stage.count / max) * 100 : 0;
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center justify-between text-xs text-slate-300">
+        <span>{stage.name}</span>
+        <span>
+          {stage.count.toLocaleString()} • {toPct(pct, 0)}
+        </span>
+      </div>
+      <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden border border-slate-700">
+        <div
+          className="h-full bg-gradient-to-r from-cyan-500 to-violet-500"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  );
 };
+
+// Use our new custom interface for the tooltip component's props.
+const RateTooltip: React.FC<CustomTooltipProps> = ({
+  active,
+  payload,
+  label,
+}) => {
+  if (active && payload && payload.length && label) {
+    const value = payload[0].value;
+
+    if (value !== null && value !== undefined) {
+      return (
+        <div className="bg-slate-900 text-slate-200 text-sm p-3 rounded-md border border-slate-700">
+          <div className="font-medium">Day: {label}</div>
+          <div>Conversion: {toPct(value)}</div>
+        </div>
+      );
+    }
+  }
+
+  return null;
+};
+
+// =============== Page ===============
+export default function ConversionInsightsPage() {
+  const {
+    totalVisitors,
+    totalOrders,
+    totalRevenue,
+    convRate,
+    aov,
+    bestDay,
+    largestDrop,
+  } = useKpis();
+
+  const conversionTrend: ConversionTrend[] = byDay.map((d) => ({
+    day: d.day,
+    rate: d.visitors > 0 ? (d.orders / d.visitors) * 100 : 0,
+  }));
+
+  const maxFunnel = funnel[0].count;
+
+  return (
+    <main className="min-h-screen bg-[#0D1117] text-white p-6">
+      <div className="max-w-7xl mx-auto space-y-10">
+        {/* Header */}
+        <header className="text-center space-y-2">
+          <h1 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-cyan-300 to-purple-400 bg-clip-text text-transparent">
+            Conversion Insights Demo
+          </h1>
+          <p className="text-slate-400">
+            Track visitors → actions → purchases and uncover bottlenecks that
+            impact revenue.
+          </p>
+        </header>
+
+        {/* KPIs */}
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <KpiCard
+            title="Visitors"
+            value={totalVisitors.toLocaleString()}
+            icon={Users}
+            accent="cyan"
+          />
+          <KpiCard
+            title="Orders"
+            value={totalOrders.toLocaleString()}
+            icon={ShoppingCart}
+            accent="violet"
+          />
+          <KpiCard
+            title="Conv. Rate"
+            value={toPct(convRate)}
+            icon={Percent}
+            accent="lime"
+          />
+          <KpiCard
+            title="AOV"
+            value={formatSAR(aov)}
+            icon={DollarSign}
+            accent="orange"
+          />
+        </section>
+
+        {/* Main grid */}
+        <section className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          {/* Funnel */}
+          <div className="lg:col-span-2 bg-slate-800/60 border border-slate-700 rounded-xl p-6 space-y-4">
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp className="w-5 h-5 text-cyan-300" />
+              <h3 className="text-lg font-semibold">Conversion Funnel</h3>
+            </div>
+            <div className="space-y-4">
+              {funnel.map((stg) => (
+                <FunnelBar key={stg.name} stage={stg} max={maxFunnel} />
+              ))}
+            </div>
+          </div>
+
+          {/* Conversion Trend */}
+          <div className="lg:col-span-3 bg-slate-800/60 border border-slate-700 rounded-xl p-6">
+            <div className="text-lg font-semibold mb-3">
+              Conversion Rate by Day
+            </div>
+            <div className="h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={conversionTrend}
+                  margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                  <XAxis dataKey="day" stroke="#9ca3af" />
+                  <YAxis tickFormatter={(v) => `${v}%`} stroke="#9ca3af" />
+                  <Tooltip content={<RateTooltip />} />
+                  <Line
+                    type="monotone"
+                    dataKey="rate"
+                    stroke="#22d3ee"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </section>
+
+        {/* Insights */}
+        <section className="bg-slate-800/60 border border-slate-700 rounded-xl p-5 md:p-6">
+          <div className="flex items-center gap-2 text-orange-300 mb-2">
+            <AlertTriangle className="w-5 h-5" />
+            <span className="font-semibold">Insights</span>
+          </div>
+          <ul className="list-disc list-inside text-slate-200 space-y-1.5">
+            <li>
+              Largest drop in funnel at{" "}
+              <span className="text-cyan-300 font-semibold">
+                {largestDrop.stage}
+              </span>{" "}
+              (drop {toPct(largestDrop.drop)}).
+            </li>
+            <li>
+              Best conversion day:{" "}
+              <span className="text-violet-300 font-semibold">
+                {bestDay.day}
+              </span>{" "}
+              with {toPct(bestDay.rate)}.
+            </li>
+            <li>
+              Estimated Revenue:{" "}
+              <span className="text-lime-300 font-semibold">
+                {formatSAR(
+                  byDay.reduce((s, d) => s + d.revenue, 0)
+                )}
+              </span>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </main>
+  );
+}

@@ -12,10 +12,8 @@ import React, { useState } from 'react';
 export default function UiUxDemoPage() {
   return (
     <div className="min-h-screen w-full bg-[#0A0A0A] text-white">
-      {/* CHANGE: Adjusted vertical padding for better mobile view and increased gap between sections. */}
       <main className="container mx-auto px-4 py-12 sm:px-6 sm:py-16 md:py-24">
-        {/* CHANGE: Increased the gap for more breathing room between sections on all screen sizes. */}
-        <div className="flex flex-col items-center gap-24 sm:gap-28 md:gap-32">
+        <div className="flex flex-col items-center gap-32 md:gap-40">
           <HeroSection />
           <PrinciplesSection />
           <InteractiveWireframeSection />
@@ -45,7 +43,6 @@ function HeroSection() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        // CHANGE: Added mx-auto to center the text block itself, not just the text within it.
         className="mx-auto mt-4 max-w-md text-base leading-7 text-gray-400 sm:mt-6 sm:max-w-xl sm:text-lg sm:leading-8 md:max-w-2xl"
       >
         An exploration of design principles, interactivity, and aesthetics coming together to create seamless user experiences.
@@ -110,12 +107,10 @@ function PrinciplesSection() {
 // ============================================================================
 function InteractiveWireframeSection() {
     return (
-        <section className="w-full max-w-4xl">
-             {/* CHANGE: Increased bottom margin for better spacing between title and paragraph. */}
+        <section className="w-full max-w-4xl mb-16 sm:mb-24">
              <h2 className="mb-4 text-center text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 A Living Prototype
             </h2>
-            {/* CHANGE: Adjusted bottom margin for consistency. */}
             <p className="mb-10 text-center text-base text-gray-400 sm:text-lg md:mb-12">
                 Hover over the mockup to see it come to life with fluid animations.
             </p>
@@ -154,7 +149,6 @@ function InteractiveWireframeDemo() {
           whileHover={{ scale: 1.02, transition: { type: 'spring', stiffness: 300 } }}
           className="relative z-10 aspect-[16/10] w-full rounded-lg bg-slate-800/80 p-3 shadow-2xl shadow-black/30 backdrop-blur-sm sm:p-4"
         >
-          {/* This layout correctly stacks vertically on mobile and horizontally on larger screens. */}
           <div className="flex h-full w-full flex-col gap-3 sm:flex-row sm:gap-4">
             <Sidebar />
             <main className="flex flex-1 flex-col gap-3 sm:gap-4">
@@ -168,7 +162,6 @@ function InteractiveWireframeDemo() {
   );
 }
 
-// Sub-components for the Wireframe
 const sidebarVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { when: 'beforeChildren', staggerChildren: 0.1, delay: 0.3 } },
@@ -181,18 +174,15 @@ function Sidebar() {
     <motion.aside
       variants={sidebarVariants}
       whileHover={{ filter: 'drop-shadow(0 0 10px rgba(59, 130, 246, 0.7))' }}
-      // This correctly takes full width on mobile and partial width on larger screens.
       className="w-full rounded-md border border-slate-700 bg-slate-900/50 p-2 transition-all duration-300 sm:w-1/4 sm:p-3"
     >
       <div className="mb-3 h-5 w-1/2 rounded bg-slate-700 sm:mb-4 sm:h-6 sm:w-3/4" />
-      {/* Sidebar items are horizontal on mobile and stack vertically on larger screens. */}
       <ul className="flex justify-around sm:flex-col sm:space-y-2">
         {iconMap.map((Icon, i) => (
           <motion.li key={i} variants={itemVariantsSidebar} className="flex items-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center rounded bg-slate-700">
               <Icon className="h-3 w-3 text-slate-500" />
             </div>
-            {/* Hiding the text label on mobile saves valuable screen space. */}
             <div className="hidden h-4 w-full rounded bg-slate-700 sm:block" />
           </motion.li>
         ))}
@@ -239,7 +229,6 @@ function PulseButton() {
   );
 }
 
-
 // ============================================================================
 // 4. Color Palette Section
 // ============================================================================
@@ -277,7 +266,6 @@ function ColorSwatch({ name, hex }: { name: string; hex: string; }) {
         <div className="flex flex-col items-center">
             <motion.div 
                 whileHover={{ scale: 1.05, y: -5 }} 
-                // The responsive size of swatches scales well.
                 className="h-20 w-20 rounded-full border-4 border-white/10 shadow-lg sm:h-24 sm:w-24" 
                 style={{ backgroundColor: hex }}
             />
@@ -293,16 +281,14 @@ function ColorSwatch({ name, hex }: { name: string; hex: string; }) {
 }
 
 // ============================================================================
-// 5. Call to Action (CTA) Section
+// 5. CTA Section
 // ============================================================================
 function CtaSection() {
     return (
         <section className="w-full max-w-2xl text-center">
-            {/* CHANGE: Added bottom margin to the h2 for consistent spacing. */}
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4 sm:mb-6">
                 Ready to Build Something Amazing?
             </h2>
-             {/* CHANGE: Removed top margin as it's now handled by the heading's bottom margin. */}
             <p className="mx-auto max-w-xl text-base leading-7 text-gray-300 sm:text-lg sm:leading-8">
                 Let&apos;s collaborate to turn your ideas into stunning, high-performance web applications.
             </p>
