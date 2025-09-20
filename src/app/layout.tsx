@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     "Idraxiom",
     "AI Solutions Saudi",
     "System Analysis Saudi",
-    "Data Analytics KSA"
+    "Data Analytics KSA",
   ],
   openGraph: {
     title: "Idraxiom – AI, Big Data & Smart Solutions",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     siteName: "Idraxiom",
     images: [
       {
-        url: "/brand/full-logo.png", // حط صورة شعارك أو صورة مناسبة
+        url: "https://idraxiom.com/brand/full-logo.png", // ✅ رابط كامل
         width: 1200,
         height: 630,
         alt: "Idraxiom Preview",
