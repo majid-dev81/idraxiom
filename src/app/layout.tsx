@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     siteName: "Idraxiom",
     images: [
       {
-        url: "https://idraxiom.com/brand/full-logo.png", // ✅ رابط كامل
+        url: "https://idraxiom.com/brand/full-logo.png",
         width: 1200,
         height: 630,
         alt: "Idraxiom Preview",
@@ -50,6 +50,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${exo2.variable} scroll-smooth font-exo`}>
+      <head>
+        {/* ✅ JSON-LD Schema.org لإخبار Google عن الشعار */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Idraxiom",
+              url: "https://idraxiom.com",
+              logo: "https://idraxiom.com/brand/full-logo.png",
+            }),
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
