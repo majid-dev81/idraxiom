@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link"; // IMPORTED: For client-side navigation
 import { motion, AnimatePresence } from "framer-motion";
-import { BrainCircuit, Users, Timer, LayoutDashboard, BarChart3, PenTool, Network, Lightbulb, Database, ArrowRight } from "lucide-react"; // IMPORTED: ArrowRight icon
+import { BrainCircuit, Users, Timer, BarChart3, PenTool, Network, Lightbulb, Database, ArrowRight, ShieldCheck, Lock, BellRing, ClipboardList } from "lucide-react"; // IMPORTED: ArrowRight icon + ArmLink section icons
 
 // --- ANIMATION VARIANTS ---
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
@@ -46,7 +46,7 @@ export default function HomePage() {
         <AboutSection />
         <TechnologiesSection />
         <ServicesSection />
-        <ProductsSection />
+        <ArmLinkSection />
         <ContactSection />
       </main>
       <Footer />
@@ -59,7 +59,7 @@ export default function HomePage() {
 // 1) Navbar
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navLinks = ["Home", "About", "Technologies", "Services", "Products", "Contact"];
+  const navLinks = ["Home", "About", "Technologies", "Services", "ArmLink", "Contact"];
 
   const menuVariants = {
     hidden: { opacity: 0, scaleY: 0 },
@@ -180,7 +180,6 @@ const TechnologiesSection = () => {
     { icon: BrainCircuit, name: "AI Vision", href: "/demo-vision" },
     { icon: Users, name: "People & Flow Analytics", href: "/demo-flow" },
     { icon: Timer, name: "Queue & Service Monitoring", href: "/demo-queue" },
-    { icon: LayoutDashboard, name: "Table & Occupancy Tracking", href: "/demo-table" },
     { icon: BarChart3, name: "Conversion Insights", href: "/demo-conversion" },
   ];
 
@@ -189,7 +188,7 @@ const TechnologiesSection = () => {
       <div className="container mx-auto text-center px-6 md:px-8">
         <AnimatedSection>
           <GradientHeading className="text-3xl md:text-4xl font-bold mb-16 text-center">Technologies We Master</GradientHeading>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {techItems.map((item) => (
               <motion.div
                 key={item.name}
@@ -283,43 +282,91 @@ const ServicesSection = () => {
 };
 
 
-// 6) Products Section
-const ProductsSection = () => (
-  <section id="products" className="py-24">
-    <div className="container mx-auto text-center px-6 md:px-8">
-      <AnimatedSection>
-        <GradientHeading className="text-3xl md:text-4xl font-bold mb-12">Our Flagship Product</GradientHeading>
-        <motion.div
-          className="bg-gradient-to-br from-cyan-900/30 to-gray-900/30 border border-white/10 rounded-3xl p-8 md:p-12 max-w-4xl mx-auto shadow-2xl shadow-black/30"
-          whileHover={{ y: -8, scale: 1.02, boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.3)" }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        >
-          <Image
-            src="/brand/meeteazy-logo.png"
-            alt="Meeteazy Official Logo"
-            width={220}
-            height={60}
-            className="mx-auto mb-6 h-auto w-56"
-          />
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto font-light">
-            Meeteazy is a smart scheduling platform designed to simplify how professionals manage their time, bookings, and client meetings.
-          </p>
-          <motion.a
-            href="https://meeteazy.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 15 }}
-            className="bg-cyan-500 text-black font-bold py-3 px-8 rounded-full transition-all duration-300 inline-block hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]"
-          >
-            Learn More
-          </motion.a>
-        </motion.div>
-      </AnimatedSection>
-    </div>
-  </section>
-);
+// 6) ArmLink Section — Weapons Storage & Armory Security Monitoring
+const ArmLinkSection = () => {
+  const capabilities = [
+    {
+      icon: ShieldCheck,
+      title: "Real-Time Inventory Tracking",
+      description: "Continuous visibility into every weapon and asset in storage, down to individual rack and case level.",
+    },
+    {
+      icon: Lock,
+      title: "Unauthorized Access Detection",
+      description: "Instant alerts the moment a restricted armory, cabinet, or storage zone is accessed outside protocol.",
+    },
+    {
+      icon: BellRing,
+      title: "Tamper & Theft Alerts",
+      description: "Automated notifications for tampering, removal, or movement of monitored items in real time.",
+    },
+    {
+      icon: ClipboardList,
+      title: "Audit-Ready Compliance Logs",
+      description: "A complete, timestamped chain-of-custody record ready for internal review or regulatory audit.",
+    },
+  ];
+
+  return (
+    <section id="armlink" className="py-24">
+      <div className="container mx-auto px-6 md:px-8">
+        <AnimatedSection>
+          <div className="relative bg-gradient-to-br from-cyan-900/20 to-gray-900/30 border border-white/10 rounded-3xl p-8 md:p-14 max-w-5xl mx-auto shadow-2xl shadow-black/30 overflow-hidden">
+            <div className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl"></div>
+
+            <div className="relative z-10 text-center mb-10">
+              <div className="mb-6 w-3/5 sm:w-2/5 md:w-1/3 mx-auto">
+                <Image
+                  src="/brand/armlink-logo.png"
+                  alt="ArmLink Logo"
+                  width={779}
+                  height={407}
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
+              <span className="inline-block text-xs font-semibold tracking-widest uppercase text-cyan-400 mb-3">
+                Built for Interior &amp; Defense Sectors
+              </span>
+              <GradientHeading className="text-3xl md:text-4xl font-bold mb-4">
+                Weapons Storage &amp; Armory Security Monitoring
+              </GradientHeading>
+              <p className="text-lg text-gray-300 max-w-2xl mx-auto font-light">
+                ArmLink is Idraxiom&apos;s dedicated platform for securing armories and weapons storage — giving accountable teams a single, real-time view of every asset under their protection.
+              </p>
+            </div>
+
+            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+              {capabilities.map((cap) => (
+                <div
+                  key={cap.title}
+                  className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-cyan-400/50"
+                >
+                  <cap.icon className="w-8 h-8 text-cyan-400 flex-shrink-0" strokeWidth={1.5} />
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-100 mb-1">{cap.title}</h3>
+                    <p className="text-gray-400 font-light text-sm leading-relaxed">{cap.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="relative z-10 text-center">
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                className="bg-cyan-500 text-black font-bold py-3 px-8 rounded-full transition-all duration-300 inline-block hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]"
+              >
+                Request a Briefing
+              </motion.a>
+            </div>
+          </div>
+        </AnimatedSection>
+      </div>
+    </section>
+  );
+};
 
 // 7) Contact Section
 const ContactSection = () => {
