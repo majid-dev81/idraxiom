@@ -75,29 +75,7 @@ export const content = {
       badge: "Beyond Armories — Full Inventory Visibility",
       title: "Warehouse & Asset Management",
       subtitle:
-        "The same ArmLink RFID engine extends beyond weapons security to give warehouses, retail floors, and asset-heavy operations real-time stock and asset visibility — from receiving to reconciliation.",
-      capabilities: [
-        {
-          title: "Real-Time Stock Levels",
-          description:
-            "Live, location-accurate counts for every SKU and asset across shelves, racks, and zones — no manual counting.",
-        },
-        {
-          title: "Inbound & Outbound Tracking",
-          description:
-            "Automatic logging of every item entering or leaving a warehouse, gate, or storage zone.",
-        },
-        {
-          title: "Asset Lifecycle & Audit Trail",
-          description:
-            "A complete timestamped history of every asset — from intake to disposal — ready for internal or regulatory audit.",
-        },
-        {
-          title: "Low-Stock & Reorder Alerts",
-          description:
-            "Automated notifications when stock drops below threshold, so replenishment never lags behind demand.",
-        },
-      ],
+        "The same ArmLink engine extends beyond weapons security to give warehouses, retail floors, and asset-heavy operations real-time stock and asset visibility — from receiving to reconciliation.",
       cta: "Request a Demo",
     },
     contact: {
@@ -189,29 +167,7 @@ export const content = {
       badge: "أبعد من الأسلحة — رؤية كاملة للمخزون",
       title: "إدارة المستودعات والأصول",
       subtitle:
-        "يمتد محرك ArmLink القائم على تقنية RFID إلى ما هو أبعد من حماية الأسلحة، ليمنح المستودعات ومنافذ البيع والمنشآت ذات الأصول الكثيفة رؤية لحظية ودقيقة للمخزون — من لحظة الاستلام وحتى الجرد النهائي.",
-      capabilities: [
-        {
-          title: "مستويات المخزون لحظياً",
-          description:
-            "عدّ دقيق ولحظي لكل صنف وأصل، مع تحديد موقعه بدقة عبر الرفوف والحوامل والمناطق، دون أي حاجة للعدّ اليدوي.",
-        },
-        {
-          title: "تتبع الوارد والصادر",
-          description:
-            "تسجيل تلقائي لكل قطعة عند دخولها أو خروجها من المستودع أو البوابة أو منطقة التخزين.",
-        },
-        {
-          title: "دورة حياة الأصل وسجل التدقيق",
-          description:
-            "سجل زمني كامل لكل أصل، من الاستلام وحتى الاستبعاد، جاهز للمراجعة الداخلية أو التدقيق الرسمي.",
-        },
-        {
-          title: "تنبيهات انخفاض المخزون وإعادة الطلب",
-          description:
-            "تنبيه تلقائي عند وصول المخزون إلى الحد الأدنى، لضمان تجديد التوريد في الوقت المناسب.",
-        },
-      ],
+        "يمتد محرك ArmLink إلى ما هو أبعد من حماية الأسلحة، ليمنح المستودعات ومنافذ البيع والمنشآت ذات الأصول الكثيفة رؤية لحظية ودقيقة للمخزون — من لحظة الاستلام وحتى الجرد النهائي.",
       cta: "اطلب عرضاً توضيحياً",
     },
     contact: {

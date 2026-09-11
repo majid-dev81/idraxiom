@@ -17,9 +17,6 @@ import {
   Database,
   ArrowRight,
   Boxes,
-  ArrowDownUp,
-  History,
-  AlertTriangle,
   Languages,
 } from "lucide-react"; // IMPORTED: ArrowRight icon + ArmLink/Warehouse section icons
 import { LangProvider, useLang } from "./i18n/LangContext";
@@ -373,7 +370,6 @@ const ArmLinkSection = () => {
 // 6b) Warehouse & Asset Management Section — extends ArmLink beyond armories
 const WarehouseSection = () => {
   const { t } = useLang();
-  const icons = [Boxes, ArrowDownUp, History, AlertTriangle];
 
   return (
     <section id="warehouse" className="py-24">
@@ -395,24 +391,6 @@ const WarehouseSection = () => {
               <p className="text-lg text-gray-300 max-w-2xl mx-auto font-light">
                 {t.warehouse.subtitle}
               </p>
-            </div>
-
-            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
-              {t.warehouse.capabilities.map((cap, i) => {
-                const Icon = icons[i];
-                return (
-                  <div
-                    key={cap.title}
-                    className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-cyan-400/50"
-                  >
-                    <Icon className="w-8 h-8 text-cyan-400 flex-shrink-0" strokeWidth={1.5} />
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-100 mb-1">{cap.title}</h3>
-                      <p className="text-gray-400 font-light text-sm leading-relaxed">{cap.description}</p>
-                    </div>
-                  </div>
-                );
-              })}
             </div>
 
             <div className="relative z-10 text-center">
