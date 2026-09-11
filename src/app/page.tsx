@@ -73,7 +73,7 @@ const HomePageInner = () => {
         <TechnologiesSection />
         <ServicesSection />
         <ArmLinkSection />
-        <WarehouseSection />
+        {/* WarehouseSection temporarily hidden — re-enable by uncommenting <WarehouseSection /> above ContactSection */}
         <ContactSection />
       </main>
       <Footer />
@@ -93,7 +93,7 @@ const Navbar = () => {
     { key: "about", label: t.nav.about },
     { key: "technologies", label: t.nav.technologies },
     { key: "armlink", label: t.nav.armlink },
-    { key: "warehouse", label: t.nav.warehouse },
+    // { key: "warehouse", label: t.nav.warehouse }, // temporarily hidden along with WarehouseSection
     { key: "contact", label: t.nav.contact },
   ];
 
