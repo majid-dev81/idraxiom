@@ -16,9 +16,6 @@ import {
   Lightbulb,
   Database,
   ArrowRight,
-  ShieldCheck,
-  Lock,
-  ClipboardList,
   Boxes,
   ArrowDownUp,
   History,
@@ -329,7 +326,6 @@ const ServicesSection = () => {
 // 6) ArmLink Section — Weapons Storage & Armory Security Monitoring
 const ArmLinkSection = () => {
   const { t } = useLang();
-  const icons = [ShieldCheck, Lock, ClipboardList];
 
   return (
     <section id="armlink" className="py-24">
@@ -354,24 +350,6 @@ const ArmLinkSection = () => {
               <p className="text-lg text-gray-300 font-light">
                 {t.armlink.subtitle}
               </p>
-            </div>
-
-            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-              {t.armlink.capabilities.map((cap, i) => {
-                const Icon = icons[i];
-                return (
-                  <div
-                    key={cap.title}
-                    className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-cyan-400/50"
-                  >
-                    <Icon className="w-8 h-8 text-cyan-400 flex-shrink-0" strokeWidth={1.5} />
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-100 mb-1">{cap.title}</h3>
-                      <p className="text-gray-400 font-light text-sm leading-relaxed">{cap.description}</p>
-                    </div>
-                  </div>
-                );
-              })}
             </div>
 
             <div className="relative z-10 text-center">

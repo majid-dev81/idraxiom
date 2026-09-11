@@ -69,23 +69,6 @@ export const content = {
     armlink: {
       title: "ArmLink",
       subtitle: "For Military Sectors",
-      capabilities: [
-        {
-          title: "Real-Time Inventory Tracking",
-          description:
-            "Continuous visibility into every weapon and asset in storage, down to individual rack and case level.",
-        },
-        {
-          title: "Unauthorized Access Detection",
-          description:
-            "Instant alerts the moment a restricted armory, cabinet, or storage zone is accessed outside protocol.",
-        },
-        {
-          title: "Audit-Ready Compliance Logs",
-          description:
-            "A complete, timestamped chain-of-custody record ready for internal review or regulatory audit.",
-        },
-      ],
       cta: "Request a Briefing",
     },
     warehouse: {
@@ -200,23 +183,6 @@ export const content = {
     armlink: {
       title: "ArmLink",
       subtitle: "للقطاعات العسكرية",
-      capabilities: [
-        {
-          title: "تتبع المخزون لحظياً",
-          description:
-            "متابعة لحظية مستمرة لكل قطعة سلاح وأصل داخل التخزين، حتى مستوى الرف والخزانة الواحدة.",
-        },
-        {
-          title: "كشف الوصول غير المصرح به",
-          description:
-            "تنبيه فوري عند أي دخول إلى مستودع أو خزانة أو منطقة مقيّدة خارج الإجراءات المعتمدة.",
-        },
-        {
-          title: "سجلات امتثال جاهزة للتدقيق",
-          description:
-            "سجل زمني كامل وموثّق لكل عملية، جاهز للمراجعة الداخلية أو التدقيق الرسمي.",
-        },
-      ],
       cta: "اطلب إحاطة تعريفية",
     },
     warehouse: {
