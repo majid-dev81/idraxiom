@@ -12,6 +12,7 @@ module.exports = {
       // 🔹 نربط خط Exo 2 اللي ضفناه في layout.tsx
       fontFamily: {
         exo: ['var(--font-exo2)', 'sans-serif'],
+        arabic: ['var(--font-cairo)', 'sans-serif'],
       },
     },
   },

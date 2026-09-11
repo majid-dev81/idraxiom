@@ -1,7 +1,7 @@
 // app/layout.tsx
 
 import type { Metadata } from "next";
-import { Exo_2 } from "next/font/google";
+import { Exo_2, Cairo } from "next/font/google";
 import "./globals.css";
 
 const exo2 = Exo_2({
@@ -9,6 +9,14 @@ const exo2 = Exo_2({
   display: "swap",
   weight: ["300", "400", "700", "800"],
   variable: "--font-exo2",
+});
+
+// Arabic-capable font used site-wide when the visitor switches to العربية.
+const cairo = Cairo({
+  subsets: ["arabic", "latin"],
+  display: "swap",
+  weight: ["300", "400", "600", "700", "800"],
+  variable: "--font-cairo",
 });
 
 export const metadata: Metadata = {
@@ -49,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${exo2.variable} scroll-smooth font-exo`}>
+    <html lang="en" className={`${exo2.variable} ${cairo.variable} scroll-smooth font-exo`}>
       <head>
         {/* ✅ JSON-LD Schema.org لإخبار Google عن الشعار */}
         <script

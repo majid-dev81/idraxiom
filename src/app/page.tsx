@@ -6,7 +6,27 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link"; // IMPORTED: For client-side navigation
 import { motion, AnimatePresence } from "framer-motion";
-import { BrainCircuit, Users, Timer, BarChart3, PenTool, Network, Lightbulb, Database, ArrowRight, ShieldCheck, Lock, BellRing, ClipboardList } from "lucide-react"; // IMPORTED: ArrowRight icon + ArmLink section icons
+import {
+  BrainCircuit,
+  Users,
+  Timer,
+  BarChart3,
+  PenTool,
+  Network,
+  Lightbulb,
+  Database,
+  ArrowRight,
+  ShieldCheck,
+  Lock,
+  BellRing,
+  ClipboardList,
+  Boxes,
+  ArrowDownUp,
+  History,
+  AlertTriangle,
+  Languages,
+} from "lucide-react"; // IMPORTED: ArrowRight icon + ArmLink/Warehouse section icons
+import { LangProvider, useLang } from "./i18n/LangContext";
 
 // --- ANIMATION VARIANTS ---
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
@@ -39,7 +59,20 @@ const GradientHeading = ({ as: Tag = 'h2', children, className = '' }: { as?: Re
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#0D1117] text-white font-sans selection:bg-cyan-400 selection:text-black">
+    <LangProvider>
+      <HomePageInner />
+    </LangProvider>
+  );
+}
+
+const HomePageInner = () => {
+  const { lang } = useLang();
+  return (
+    <div
+      className={`min-h-screen bg-[#0D1117] text-white selection:bg-cyan-400 selection:text-black ${
+        lang === "ar" ? "font-arabic" : "font-sans"
+      }`}
+    >
       <Navbar />
       <main>
         <HeroSection />
@@ -47,19 +80,29 @@ export default function HomePage() {
         <TechnologiesSection />
         <ServicesSection />
         <ArmLinkSection />
+        <WarehouseSection />
         <ContactSection />
       </main>
       <Footer />
     </div>
   );
-}
+};
 
 // --- PAGE SECTIONS ---
 
 // 1) Navbar
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navLinks = ["Home", "About", "Technologies", "Services", "ArmLink", "Contact"];
+  const { lang, toggleLang, t } = useLang();
+
+  const navLinks = [
+    { key: "home", label: t.nav.home },
+    { key: "about", label: t.nav.about },
+    { key: "technologies", label: t.nav.technologies },
+    { key: "armlink", label: t.nav.armlink },
+    { key: "warehouse", label: t.nav.warehouse },
+    { key: "contact", label: t.nav.contact },
+  ];
 
   const menuVariants = {
     hidden: { opacity: 0, scaleY: 0 },
@@ -77,18 +120,38 @@ const Navbar = () => {
           </a>
         </motion.div>
 
-        <div className="hidden md:flex items-center space-x-8">
-          {navLinks.filter(l => l !== "Services").map((link) => (
-            <motion.a key={link} href={`#${link.toLowerCase()}`} className="font-light hover:text-cyan-400 transition-colors duration-300" whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.95 }}>
-              {link}
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <motion.a key={link.key} href={`#${link.key}`} className="font-light hover:text-cyan-400 transition-colors duration-300" whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.95 }}>
+              {link.label}
             </motion.a>
           ))}
+          <motion.button
+            type="button"
+            onClick={toggleLang}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 rounded-full border border-white/20 px-3 py-1.5 text-sm font-semibold hover:border-cyan-400/60 hover:text-cyan-400 transition-colors duration-300"
+            aria-label="Toggle language"
+          >
+            <Languages className="w-4 h-4" strokeWidth={1.75} />
+            {lang === "en" ? "عربي" : "EN"}
+          </motion.button>
         </div>
 
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-3">
+          <button
+            type="button"
+            onClick={toggleLang}
+            className="flex items-center gap-1 rounded-full border border-white/20 px-2.5 py-1 text-xs font-semibold"
+            aria-label="Toggle language"
+          >
+            <Languages className="w-3.5 h-3.5" strokeWidth={1.75} />
+            {lang === "en" ? "عربي" : "EN"}
+          </button>
           <button onClick={() => setIsOpen(!isOpen)} className="focus:outline-none z-50 relative">
             <motion.div animate={isOpen ? "open" : "closed"}>
-              <svg width="24" height="24" viewBox="0 0 24" fill="none">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <motion.path stroke="currentColor" strokeWidth="2" strokeLinecap="round" variants={{ closed: { d: "M 2 6.5 L 22 6.5" }, open: { d: "M 4 18 L 20 6" } }} />
                 <motion.path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M 2 12.5 L 22 12.5" variants={{ closed: { opacity: 1 }, open: { opacity: 0 } }} transition={{ duration: 0.1 }} />
                 <motion.path stroke="currentColor" strokeWidth="2" strokeLinecap="round" variants={{ closed: { d: "M 2 18.5 L 22 18.5" }, open: { d: "M 4 6 L 20 18" } }} />
@@ -102,9 +165,9 @@ const Navbar = () => {
         {isOpen && (
           <motion.div variants={menuVariants} initial="hidden" animate="visible" exit="exit" className="md:hidden overflow-hidden origin-top">
             <div className="flex flex-col space-y-2 p-4 pt-0">
-               {navLinks.filter(l => l !== "Services").map((link) => (
-                <a key={link} href={`#${link.toLowerCase()}`} className="text-center text-lg p-2 rounded-md hover:bg-white/5 transition-colors" onClick={() => setIsOpen(false)}>
-                  {link}
+              {navLinks.map((link) => (
+                <a key={link.key} href={`#${link.key}`} className="text-center text-lg p-2 rounded-md hover:bg-white/5 transition-colors" onClick={() => setIsOpen(false)}>
+                  {link.label}
                 </a>
               ))}
             </div>
@@ -117,6 +180,7 @@ const Navbar = () => {
 
 // 2) Hero Section
 const HeroSection = () => {
+  const { t } = useLang();
   const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.1 } } };
   const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE_OUT } } };
 
@@ -141,15 +205,15 @@ const HeroSection = () => {
         </motion.div>
         <motion.div variants={itemVariants}>
           <GradientHeading as="h1" className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-4">
-            AI-Powered Solutions for<br />Modern Businesses
+            {t.hero.headingLine1}<br />{t.hero.headingLine2}
           </GradientHeading>
         </motion.div>
         <motion.p variants={itemVariants} className="max-w-2xl text-lg md:text-xl text-gray-300 font-light mb-8">
-          At Idraxiom, we design practical and innovative AI platforms that empower businesses to grow.
+          {t.hero.subtitle}
         </motion.p>
         <motion.div variants={itemVariants}>
           <motion.a href="#contact" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 15 }} className="bg-cyan-500 text-black font-bold py-3 px-8 rounded-full transition-all duration-300 hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]">
-            Contact Us
+            {t.hero.cta}
           </motion.a>
         </motion.div>
       </motion.div>
@@ -158,58 +222,60 @@ const HeroSection = () => {
 };
 
 // 3) About Section
-const AboutSection = () => (
-  <section id="about" className="py-24">
-    <div className="container mx-auto px-6 md:px-8">
-      <AnimatedSection>
-        <div className="relative bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 backdrop-blur-xl shadow-2xl shadow-black/20 overflow-hidden">
-          <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl"></div>
-          <GradientHeading className="text-3xl md:text-4xl font-bold mb-6 text-center">About Idraxiom Establishment</GradientHeading>
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto text-center leading-relaxed font-light">
-            Idraxiom Establishment is a Saudi-registered establishment specializing in Artificial Intelligence, Computer Vision, and SaaS solutions. We focus on delivering innovative and practical products that empower businesses to grow.
-          </p>
-        </div>
-      </AnimatedSection>
-    </div>
-  </section>
-);
+const AboutSection = () => {
+  const { t } = useLang();
+  return (
+    <section id="about" className="py-24">
+      <div className="container mx-auto px-6 md:px-8">
+        <AnimatedSection>
+          <div className="relative bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 backdrop-blur-xl shadow-2xl shadow-black/20 overflow-hidden">
+            <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl"></div>
+            <GradientHeading className="text-3xl md:text-4xl font-bold mb-6 text-center">{t.about.title}</GradientHeading>
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto text-center leading-relaxed font-light">
+              {t.about.body}
+            </p>
+          </div>
+        </AnimatedSection>
+      </div>
+    </section>
+  );
+};
 
-// 4) <<< UPDATED AND REDESIGNED SECTION >>>
+// 4) Technologies Section
 const TechnologiesSection = () => {
-  const techItems = [
-    { icon: BrainCircuit, name: "AI Vision", href: "/demo-vision" },
-    { icon: Users, name: "People & Flow Analytics", href: "/demo-flow" },
-    { icon: Timer, name: "Queue & Service Monitoring", href: "/demo-queue" },
-    { icon: BarChart3, name: "Conversion Insights", href: "/demo-conversion" },
-  ];
+  const { t } = useLang();
+  const icons = [BrainCircuit, Users, Timer, BarChart3];
 
   return (
     <section id="technologies" className="py-24">
       <div className="container mx-auto text-center px-6 md:px-8">
         <AnimatedSection>
-          <GradientHeading className="text-3xl md:text-4xl font-bold mb-16 text-center">Technologies We Master</GradientHeading>
+          <GradientHeading className="text-3xl md:text-4xl font-bold mb-16 text-center">{t.technologies.title}</GradientHeading>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {techItems.map((item) => (
-              <motion.div
-                key={item.name}
-                className="group relative flex flex-col text-center items-center bg-white/5 p-8 rounded-2xl border border-white/10 transition-all duration-300 hover:border-cyan-400/50 hover:-translate-y-2"
-                whileHover={{ scale: 1.05 }}
-              >
-                <div className="absolute inset-0 bg-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-80 transition-opacity duration-300"></div>
-                
-                {/* Content wrapper for z-index and flex layout */}
-                <div className="relative z-10 flex flex-col items-center h-full">
-                  <item.icon className="w-14 h-14 text-cyan-400 mb-5" strokeWidth={1.5} />
-                  <h3 className="text-xl font-bold text-gray-100 mb-3">{item.name}</h3>
+            {t.technologies.items.map((item, i) => {
+              const Icon = icons[i];
+              return (
+                <motion.div
+                  key={item.name}
+                  className="group relative flex flex-col text-center items-center bg-white/5 p-8 rounded-2xl border border-white/10 transition-all duration-300 hover:border-cyan-400/50 hover:-translate-y-2"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <div className="absolute inset-0 bg-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-80 transition-opacity duration-300"></div>
 
-                  {/* "See More" link pushed to the bottom */}
-                  <Link href={item.href} className="mt-auto pt-4 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors duration-300 flex items-center gap-2">
-                    See More
-                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
+                  {/* Content wrapper for z-index and flex layout */}
+                  <div className="relative z-10 flex flex-col items-center h-full">
+                    <Icon className="w-14 h-14 text-cyan-400 mb-5" strokeWidth={1.5} />
+                    <h3 className="text-xl font-bold text-gray-100 mb-3">{item.name}</h3>
+
+                    {/* "See More" link pushed to the bottom */}
+                    <Link href={item.href} className="mt-auto pt-4 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors duration-300 flex items-center gap-2">
+                      {t.common.seeMore}
+                      <ArrowRight className="w-4 h-4 rtl:rotate-180 transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+                    </Link>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </AnimatedSection>
       </div>
@@ -219,61 +285,40 @@ const TechnologiesSection = () => {
 
 // 5) Services Section
 const ServicesSection = () => {
-  const serviceItems = [
-    {
-      icon: PenTool,
-      title: "UI/UX Design",
-      description: "Crafting intuitive and beautiful user interfaces that enhance user experience and engagement.",
-      href: "/demo-uiux",
-    },
-    {
-      icon: Network,
-      title: "System Analysis",
-      description: "Analyzing and defining system requirements to build robust and scalable software architecture.",
-      href: "/demo-system",
-    },
-    {
-      icon: Lightbulb,
-      title: "AI Solutions (Lite)",
-      description: "Integrating lightweight AI models to automate tasks and provide intelligent insights for your business.",
-      href: "/demo-ai",
-    },
-    {
-      icon: Database,
-      title: "Big Data & Analytics (Lite)",
-      description: "Processing and analyzing large datasets to uncover trends and drive data-informed decisions.",
-      href: "/demo",
-    },
-  ];
+  const { t } = useLang();
+  const icons = [PenTool, Network, Lightbulb, Database];
 
   return (
     <section id="services" className="py-24 bg-[#0D1117]">
       <div className="container mx-auto px-6 md:px-8">
         <AnimatedSection>
-          <GradientHeading className="text-3xl md:text-4xl font-bold mb-16 text-center">Our Services</GradientHeading>
+          <GradientHeading className="text-3xl md:text-4xl font-bold mb-16 text-center">{t.services.title}</GradientHeading>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {serviceItems.map((service) => (
-              <motion.div
-                key={service.title}
-                className="group relative flex flex-col text-center items-center bg-white/5 p-8 rounded-2xl border border-white/10 transition-all duration-300 hover:border-cyan-400/50 hover:-translate-y-2"
-                whileHover={{ scale: 1.02 }}
-              >
-                <div className="absolute inset-0 bg-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-80 transition-opacity duration-300"></div>
-                
-                {/* Content wrapper */}
-                <div className="relative z-10 flex flex-col items-center h-full">
-                  <service.icon className="w-12 h-12 text-cyan-400 mb-5" strokeWidth={1.5} />
-                  <h3 className="text-xl font-bold text-gray-100 mb-3">{service.title}</h3>
-                  <p className="text-gray-400 font-light text-sm leading-relaxed">{service.description}</p>
+            {t.services.items.map((service, i) => {
+              const Icon = icons[i];
+              return (
+                <motion.div
+                  key={service.title}
+                  className="group relative flex flex-col text-center items-center bg-white/5 p-8 rounded-2xl border border-white/10 transition-all duration-300 hover:border-cyan-400/50 hover:-translate-y-2"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="absolute inset-0 bg-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-80 transition-opacity duration-300"></div>
 
-                  {/* "See More" link pushed to the bottom */}
-                  <Link href={service.href} className="mt-auto pt-4 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors duration-300 flex items-center gap-2">
-                    See More
-                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
+                  {/* Content wrapper */}
+                  <div className="relative z-10 flex flex-col items-center h-full">
+                    <Icon className="w-12 h-12 text-cyan-400 mb-5" strokeWidth={1.5} />
+                    <h3 className="text-xl font-bold text-gray-100 mb-3">{service.title}</h3>
+                    <p className="text-gray-400 font-light text-sm leading-relaxed">{service.description}</p>
+
+                    {/* "See More" link pushed to the bottom */}
+                    <Link href={service.href} className="mt-auto pt-4 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors duration-300 flex items-center gap-2">
+                      {t.common.seeMore}
+                      <ArrowRight className="w-4 h-4 rtl:rotate-180 transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+                    </Link>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </AnimatedSection>
       </div>
@@ -284,28 +329,8 @@ const ServicesSection = () => {
 
 // 6) ArmLink Section — Weapons Storage & Armory Security Monitoring
 const ArmLinkSection = () => {
-  const capabilities = [
-    {
-      icon: ShieldCheck,
-      title: "Real-Time Inventory Tracking",
-      description: "Continuous visibility into every weapon and asset in storage, down to individual rack and case level.",
-    },
-    {
-      icon: Lock,
-      title: "Unauthorized Access Detection",
-      description: "Instant alerts the moment a restricted armory, cabinet, or storage zone is accessed outside protocol.",
-    },
-    {
-      icon: BellRing,
-      title: "Tamper & Theft Alerts",
-      description: "Automated notifications for tampering, removal, or movement of monitored items in real time.",
-    },
-    {
-      icon: ClipboardList,
-      title: "Audit-Ready Compliance Logs",
-      description: "A complete, timestamped chain-of-custody record ready for internal review or regulatory audit.",
-    },
-  ];
+  const { t } = useLang();
+  const icons = [ShieldCheck, Lock, BellRing, ClipboardList];
 
   return (
     <section id="armlink" className="py-24">
@@ -315,39 +340,42 @@ const ArmLinkSection = () => {
             <div className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
             <div className="relative z-10 text-center mb-10">
-              <div className="mb-6 w-3/5 sm:w-2/5 md:w-1/3 mx-auto">
+              <div className="mb-6 w-4/5 sm:w-3/5 md:w-2/5 mx-auto">
                 <Image
                   src="/brand/armlink-logo.png"
                   alt="ArmLink Logo"
-                  width={779}
-                  height={407}
+                  width={767}
+                  height={209}
                   style={{ objectFit: "contain" }}
                 />
               </div>
               <span className="inline-block text-xs font-semibold tracking-widest uppercase text-cyan-400 mb-3">
-                Built for Interior &amp; Defense Sectors
+                {t.armlink.badge}
               </span>
               <GradientHeading className="text-3xl md:text-4xl font-bold mb-4">
-                Weapons Storage &amp; Armory Security Monitoring
+                {t.armlink.title}
               </GradientHeading>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto font-light">
-                ArmLink is Idraxiom&apos;s dedicated platform for securing armories and weapons storage — giving accountable teams a single, real-time view of every asset under their protection.
+                {t.armlink.subtitle}
               </p>
             </div>
 
             <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
-              {capabilities.map((cap) => (
-                <div
-                  key={cap.title}
-                  className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-cyan-400/50"
-                >
-                  <cap.icon className="w-8 h-8 text-cyan-400 flex-shrink-0" strokeWidth={1.5} />
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-100 mb-1">{cap.title}</h3>
-                    <p className="text-gray-400 font-light text-sm leading-relaxed">{cap.description}</p>
+              {t.armlink.capabilities.map((cap, i) => {
+                const Icon = icons[i];
+                return (
+                  <div
+                    key={cap.title}
+                    className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-cyan-400/50"
+                  >
+                    <Icon className="w-8 h-8 text-cyan-400 flex-shrink-0" strokeWidth={1.5} />
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-100 mb-1">{cap.title}</h3>
+                      <p className="text-gray-400 font-light text-sm leading-relaxed">{cap.description}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="relative z-10 text-center">
@@ -358,7 +386,70 @@ const ArmLinkSection = () => {
                 transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 className="bg-cyan-500 text-black font-bold py-3 px-8 rounded-full transition-all duration-300 inline-block hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]"
               >
-                Request a Briefing
+                {t.armlink.cta}
+              </motion.a>
+            </div>
+          </div>
+        </AnimatedSection>
+      </div>
+    </section>
+  );
+};
+
+// 6b) Warehouse & Asset Management Section — extends ArmLink beyond armories
+const WarehouseSection = () => {
+  const { t } = useLang();
+  const icons = [Boxes, ArrowDownUp, History, AlertTriangle];
+
+  return (
+    <section id="warehouse" className="py-24">
+      <div className="container mx-auto px-6 md:px-8">
+        <AnimatedSection>
+          <div className="relative bg-gradient-to-br from-gray-900/30 to-cyan-900/10 border border-white/10 rounded-3xl p-8 md:p-14 max-w-5xl mx-auto shadow-2xl shadow-black/30 overflow-hidden">
+            <div className="absolute bottom-0 left-0 -translate-x-1/3 translate-y-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl"></div>
+
+            <div className="relative z-10 text-center mb-10">
+              <div className="mx-auto mb-6 flex w-fit items-center justify-center rounded-2xl border border-cyan-400/30 bg-white/5 p-4">
+                <Boxes className="w-10 h-10 text-cyan-400" strokeWidth={1.5} />
+              </div>
+              <span className="inline-block text-xs font-semibold tracking-widest uppercase text-cyan-400 mb-3">
+                {t.warehouse.badge}
+              </span>
+              <GradientHeading className="text-3xl md:text-4xl font-bold mb-4">
+                {t.warehouse.title}
+              </GradientHeading>
+              <p className="text-lg text-gray-300 max-w-2xl mx-auto font-light">
+                {t.warehouse.subtitle}
+              </p>
+            </div>
+
+            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+              {t.warehouse.capabilities.map((cap, i) => {
+                const Icon = icons[i];
+                return (
+                  <div
+                    key={cap.title}
+                    className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-cyan-400/50"
+                  >
+                    <Icon className="w-8 h-8 text-cyan-400 flex-shrink-0" strokeWidth={1.5} />
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-100 mb-1">{cap.title}</h3>
+                      <p className="text-gray-400 font-light text-sm leading-relaxed">{cap.description}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="relative z-10 text-center">
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                className="bg-cyan-500 text-black font-bold py-3 px-8 rounded-full transition-all duration-300 inline-block hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]"
+              >
+                {t.warehouse.cta}
               </motion.a>
             </div>
           </div>
@@ -370,6 +461,7 @@ const ArmLinkSection = () => {
 
 // 7) Contact Section
 const ContactSection = () => {
+  const { t } = useLang();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -385,82 +477,82 @@ const ContactSection = () => {
       if (!response.ok) {
         throw new Error(`Server responded with ${response.status}`);
       }
-      alert("✅ Your message has been sent successfully");
+      alert(t.contact.form.success);
       setName('');
       setEmail('');
       setMessage('');
     } catch (error) {
       console.error("Form submission error:", error);
-      alert("❌ Failed to send message, please try again later");
+      alert(t.contact.form.error);
     }
   };
-  
+
   return (
     <section id="contact" className="py-24">
       <div className="container mx-auto px-6 md:px-8">
         <AnimatedSection>
-          <GradientHeading className="text-3xl md:text-4xl font-bold text-center mb-12">Get in Touch</GradientHeading>
+          <GradientHeading className="text-3xl md:text-4xl font-bold text-center mb-12">{t.contact.title}</GradientHeading>
           <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-start bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 shadow-2xl shadow-black/20">
             <div className="space-y-6">
               <p className="text-lg text-gray-300 font-light">
-                Have a question or want to work together? Send us a message, and we&apos;ll get back to you as soon as possible.
+                {t.contact.intro}
               </p>
               <div className="space-y-4">
                 <a href="mailto:contact@idraxiom.com" className="flex items-center text-gray-200 hover:text-cyan-400 transition-colors">
-                  <span className="text-cyan-400 mr-3 text-xl">📧</span>
+                  <span className="text-cyan-400 me-3 text-xl">📧</span>
                   <span>contact@idraxiom.com</span>
                 </a>
               </div>
               <p className="text-sm text-gray-400 pt-4 border-t border-white/10">
-                Official Business Name: Idraxiom Establishment
+                {t.contact.officialName}
               </p>
             </div>
-            
+
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">Name</label>
-                <input 
-                  type="text" 
-                  id="name" 
-                  name="name" 
+                <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">{t.contact.form.name}</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full bg-white/5 border border-white/20 rounded-lg py-2 px-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition" 
+                  className="w-full bg-white/5 border border-white/20 rounded-lg py-2 px-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition"
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">Email</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  name="email" 
+                <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">{t.contact.form.email}</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full bg-white/5 border border-white/20 rounded-lg py-2 px-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition" 
+                  className="w-full bg-white/5 border border-white/20 rounded-lg py-2 px-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition"
                 />
               </div>
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">Message</label>
-                <textarea 
-                  id="message" 
-                  name="message" 
-                  rows={4} 
+                <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">{t.contact.form.message}</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
                   className="w-full bg-white/5 border border-white/20 rounded-lg py-2 px-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition"
                 ></textarea>
               </div>
-              <motion.button 
-                type="submit" 
-                whileHover={{ scale: 1.05 }} 
-                whileTap={{ scale: 0.95 }} 
-                transition={{ type: "spring", stiffness: 400, damping: 15 }} 
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 className="w-full bg-cyan-500 text-black font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]"
               >
-                Send Message
+                {t.contact.form.submit}
               </motion.button>
             </form>
           </div>
@@ -472,10 +564,13 @@ const ContactSection = () => {
 
 
 // 8) Footer
-const Footer = () => (
-  <footer className="py-8 border-t border-white/10">
-    <div className="container mx-auto text-center text-gray-400 px-6 md:px-8">
-      <p className="font-light">&copy; {new Date().getFullYear()} Idraxiom Establishment. All rights reserved.</p>
-    </div>
-  </footer>
-);
+const Footer = () => {
+  const { t } = useLang();
+  return (
+    <footer className="py-8 border-t border-white/10">
+      <div className="container mx-auto text-center text-gray-400 px-6 md:px-8">
+        <p className="font-light">{t.footer.rights(new Date().getFullYear())}</p>
+      </div>
+    </footer>
+  );
+};
