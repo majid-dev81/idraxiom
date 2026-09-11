@@ -18,7 +18,6 @@ import {
   ArrowRight,
   ShieldCheck,
   Lock,
-  BellRing,
   ClipboardList,
   Boxes,
   ArrowDownUp,
@@ -330,7 +329,7 @@ const ServicesSection = () => {
 // 6) ArmLink Section — Weapons Storage & Armory Security Monitoring
 const ArmLinkSection = () => {
   const { t } = useLang();
-  const icons = [ShieldCheck, Lock, BellRing, ClipboardList];
+  const icons = [ShieldCheck, Lock, ClipboardList];
 
   return (
     <section id="armlink" className="py-24">
@@ -344,23 +343,20 @@ const ArmLinkSection = () => {
                 <Image
                   src="/brand/armlink-logo.png"
                   alt="ArmLink Logo"
-                  width={767}
-                  height={209}
+                  width={1200}
+                  height={400}
                   style={{ objectFit: "contain" }}
                 />
               </div>
-              <span className="inline-block text-xs font-semibold tracking-widest uppercase text-cyan-400 mb-3">
-                {t.armlink.badge}
-              </span>
-              <GradientHeading className="text-3xl md:text-4xl font-bold mb-4">
+              <GradientHeading className="text-3xl md:text-4xl font-bold mb-2">
                 {t.armlink.title}
               </GradientHeading>
-              <p className="text-lg text-gray-300 max-w-2xl mx-auto font-light">
+              <p className="text-lg text-gray-300 font-light">
                 {t.armlink.subtitle}
               </p>
             </div>
 
-            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
               {t.armlink.capabilities.map((cap, i) => {
                 const Icon = icons[i];
                 return (

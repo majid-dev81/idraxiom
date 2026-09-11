@@ -21,7 +21,7 @@ export const content = {
       headingLine1: "AI-Powered Solutions for",
       headingLine2: "Modern Businesses",
       subtitle:
-        "At Idraxiom, we design practical and innovative AI platforms that empower businesses to grow.",
+        "At Idraxiom, we build practical, innovative AI solutions that help businesses grow.",
       cta: "Contact Us",
     },
     about: {
@@ -55,7 +55,7 @@ export const content = {
         {
           title: "AI Solutions (Lite)",
           description:
-            "Integrating lightweight AI models to automate tasks and provide intelligent insights for your business.",
+            "Integrating simplified AI models to automate tasks and deliver intelligent insights for your business.",
           href: "/demo-ai",
         },
         {
@@ -67,10 +67,8 @@ export const content = {
       ],
     },
     armlink: {
-      badge: "Built for Interior & Defense Sectors",
-      title: "Weapons Storage & Armory Security Monitoring",
-      subtitle:
-        "ArmLink is Idraxiom's dedicated platform for securing armories and weapons storage — giving accountable teams a single, real-time view of every asset under their protection.",
+      title: "ArmLink",
+      subtitle: "For Military Sectors",
       capabilities: [
         {
           title: "Real-Time Inventory Tracking",
@@ -81,11 +79,6 @@ export const content = {
           title: "Unauthorized Access Detection",
           description:
             "Instant alerts the moment a restricted armory, cabinet, or storage zone is accessed outside protocol.",
-        },
-        {
-          title: "Tamper & Theft Alerts",
-          description:
-            "Automated notifications for tampering, removal, or movement of monitored items in real time.",
         },
         {
           title: "Audit-Ready Compliance Logs",
@@ -157,9 +150,9 @@ export const content = {
     },
     hero: {
       headingLine1: "حلول ذكاء اصطناعي",
-      headingLine2: "لأعمال العصر",
+      headingLine2: "للشركات الحديثة",
       subtitle:
-        "في إدراكسيوم، نصمم منصات ذكاء اصطناعي عملية ومبتكرة تمكّن الشركات من النمو.",
+        "في إدراكسيوم، نطوّر حلول ذكاء اصطناعي عملية ومبتكرة تساعد الشركات على النمو.",
       cta: "تواصل معنا",
     },
     about: {
@@ -191,13 +184,13 @@ export const content = {
           href: "/demo-system",
         },
         {
-          title: "حلول الذكاء الاصطناعي (مخفّفة)",
+          title: "حلول الذكاء الاصطناعي (المبسّطة)",
           description:
-            "دمج نماذج ذكاء اصطناعي خفيفة لأتمتة المهام وتقديم رؤى ذكية لأعمالك.",
+            "دمج نماذج ذكاء اصطناعي مبسّطة لأتمتة المهام وتقديم رؤى ذكية تخدم أعمالك.",
           href: "/demo-ai",
         },
         {
-          title: "البيانات الضخمة والتحليلات (مخفّفة)",
+          title: "البيانات الضخمة والتحليلات (المبسّطة)",
           description:
             "معالجة وتحليل مجموعات بيانات كبيرة لاكتشاف الأنماط واتخاذ قرارات مبنية على البيانات.",
           href: "/demo",
@@ -205,30 +198,23 @@ export const content = {
       ],
     },
     armlink: {
-      badge: "مصمم لقطاعي الداخلية والدفاع",
-      title: "مراقبة أمن تخزين الأسلحة والمستودعات",
-      subtitle:
-        "ArmLink هي منصة إدراكسيوم المخصصة لتأمين المستودعات ومخازن الأسلحة، وتمنح الفرق المسؤولة رؤية لحظية موحدة لكل أصل تحت حمايتها.",
+      title: "ArmLink",
+      subtitle: "للقطاعات العسكرية",
       capabilities: [
         {
           title: "تتبع المخزون لحظياً",
           description:
-            "رؤية مستمرة لكل قطعة سلاح وأصل داخل التخزين، وصولاً إلى مستوى الرف والحقيبة الفردية.",
+            "متابعة لحظية مستمرة لكل قطعة سلاح وأصل داخل التخزين، حتى مستوى الرف والخزانة الواحدة.",
         },
         {
           title: "كشف الوصول غير المصرح به",
           description:
-            "تنبيهات فورية لحظة الوصول إلى مستودع أو خزانة أو منطقة تخزين مقيدة خارج البروتوكول المعتمد.",
-        },
-        {
-          title: "تنبيهات العبث والسرقة",
-          description:
-            "إشعارات تلقائية عند أي عبث أو إزالة أو تحريك للعناصر الخاضعة للمراقبة، بشكل لحظي.",
+            "تنبيه فوري عند أي دخول إلى مستودع أو خزانة أو منطقة مقيّدة خارج الإجراءات المعتمدة.",
         },
         {
           title: "سجلات امتثال جاهزة للتدقيق",
           description:
-            "سجل زمني كامل لسلسلة العهدة، جاهز للمراجعة الداخلية أو التدقيق التنظيمي.",
+            "سجل زمني كامل وموثّق لكل عملية، جاهز للمراجعة الداخلية أو التدقيق الرسمي.",
         },
       ],
       cta: "اطلب إحاطة تعريفية",
@@ -237,27 +223,27 @@ export const content = {
       badge: "أبعد من الأسلحة — رؤية كاملة للمخزون",
       title: "إدارة المستودعات والأصول",
       subtitle:
-        "نفس محرك ArmLink القائم على تقنية RFID يمتد إلى ما هو أبعد من حماية الأسلحة، ليمنح المستودعات ومنافذ البيع والعمليات كثيفة الأصول رؤية لحظية دقيقة للمخزون والأصول — من الاستلام وحتى المطابقة النهائية.",
+        "يمتد محرك ArmLink القائم على تقنية RFID إلى ما هو أبعد من حماية الأسلحة، ليمنح المستودعات ومنافذ البيع والمنشآت ذات الأصول الكثيفة رؤية لحظية ودقيقة للمخزون — من لحظة الاستلام وحتى الجرد النهائي.",
       capabilities: [
         {
           title: "مستويات المخزون لحظياً",
           description:
-            "عدّ دقيق ومحدَّث الموقع لكل صنف وأصل عبر الرفوف والحوامل والمناطق — بدون عدّ يدوي.",
+            "عدّ دقيق ولحظي لكل صنف وأصل، مع تحديد موقعه بدقة عبر الرفوف والحوامل والمناطق، دون أي حاجة للعدّ اليدوي.",
         },
         {
           title: "تتبع الوارد والصادر",
           description:
-            "تسجيل تلقائي لكل قطعة تدخل أو تخرج من المستودع أو البوابة أو منطقة التخزين.",
+            "تسجيل تلقائي لكل قطعة عند دخولها أو خروجها من المستودع أو البوابة أو منطقة التخزين.",
         },
         {
           title: "دورة حياة الأصل وسجل التدقيق",
           description:
-            "سجل زمني كامل لكل أصل — من الاستلام وحتى الاستبعاد — جاهز للمراجعة الداخلية أو التدقيق التنظيمي.",
+            "سجل زمني كامل لكل أصل، من الاستلام وحتى الاستبعاد، جاهز للمراجعة الداخلية أو التدقيق الرسمي.",
         },
         {
           title: "تنبيهات انخفاض المخزون وإعادة الطلب",
           description:
-            "تنبيهات تلقائية عند انخفاض المخزون عن الحد الأدنى، حتى لا يتأخر التزويد عن الطلب.",
+            "تنبيه تلقائي عند وصول المخزون إلى الحد الأدنى، لضمان تجديد التوريد في الوقت المناسب.",
         },
       ],
       cta: "اطلب عرضاً توضيحياً",
