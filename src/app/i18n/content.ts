@@ -69,7 +69,7 @@ export const content = {
     armlink: {
       title: "ArmLink",
       subtitle: "For Military Sectors",
-      cta: "Request a Briefing",
+      cta: "Contact Us",
     },
     warehouse: {
       badge: "Beyond Armories — Full Inventory Visibility",
@@ -183,7 +183,7 @@ export const content = {
     armlink: {
       title: "ArmLink",
       subtitle: "للقطاعات العسكرية",
-      cta: "اطلب إحاطة تعريفية",
+      cta: "تواصل معنا",
     },
     warehouse: {
       badge: "أبعد من الأسلحة — رؤية كاملة للمخزون",
