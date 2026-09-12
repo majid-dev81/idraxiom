@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+// Sender address must be on a domain verified in the Resend dashboard.
+// Override via env vars once the domain is verified, without needing a code change.
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Idraxiom Website <contact@idraxiom.com>";
+const TO_EMAIL = process.env.RESEND_TO_EMAIL || "contact@idraxiom.com";
 
 export async function POST(request: Request) {
   try {
@@ -12,43 +17,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // محاولة أولى: 465 (SSL)
-    let transporter = nodemailer.createTransport({
-      host: "smtp.zoho.sa",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "contact@idraxiom.com",
-        pass: process.env.ZOHO_APP_PASSWORD,
-      },
-    });
-
-    try {
-      await transporter.verify();
-      console.log("✅ Connected via port 465 (SSL)");
-    } catch (err) {
-      console.warn("⚠️ Port 465 failed, retrying on 587 (TLS)...");
-
-      // محاولة ثانية: 587 (TLS)
-      transporter = nodemailer.createTransport({
-        host: "smtp.zoho.com",
-        port: 587,
-        secure: false,
-        requireTLS: true,
-        auth: {
-          user: "contact@idraxiom.com",
-          pass: process.env.ZOHO_APP_PASSWORD,
-        },
-      });
-
-      await transporter.verify();
-      console.log("✅ Connected via port 587 (TLS)");
+    if (!process.env.RESEND_API_KEY) {
+      console.error("❌ RESEND_API_KEY is not set");
+      return NextResponse.json(
+        { success: false, message: "Email service not configured" },
+        { status: 500 }
+      );
     }
 
-    // خيارات الإيميل
-    const mailOptions = {
-      from: '"Idraxiom Website" <contact@idraxiom.com>',
-      to: "contact@idraxiom.com",
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    const { error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: TO_EMAIL,
       replyTo: email,
       subject: `New message from ${name}`,
       text: `You have a new message from:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
@@ -62,9 +43,15 @@ export async function POST(request: Request) {
           <p style="white-space: pre-wrap; background-color: #f4f4f4; padding: 15px; border-radius: 5px;">${message}</p>
         </div>
       `,
-    };
+    });
 
-    await transporter.sendMail(mailOptions);
+    if (error) {
+      console.error("❌ Error sending email via Resend:", error);
+      return NextResponse.json(
+        { success: false, message: "Failed to send email" },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
       { success: true, message: "Email sent successfully" },
