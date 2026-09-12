@@ -40,14 +40,21 @@ export const metadata: Metadata = {
     siteName: "Idraxiom",
     images: [
       {
-        url: "https://idraxiom.com/brand/full-logo.png",
+        url: "https://idraxiom.com/brand/idraxiom-social-v2.jpg",
         width: 1200,
         height: 630,
-        alt: "Idraxiom Preview",
+        alt: "Idraxiom – AI, Computer Vision & SaaS",
       },
     ],
     locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Idraxiom – AI, Big Data & Smart Solutions",
+    description:
+      "Transforming businesses in Saudi Arabia with AI, Big Data, and innovative solutions.",
+    images: ["https://idraxiom.com/brand/idraxiom-social-v2.jpg"],
   },
 };
 
