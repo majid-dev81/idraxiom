@@ -3,7 +3,13 @@ import { Resend } from "resend";
 
 // Sender address must be on a domain verified in the Resend dashboard.
 // Override via env vars once the domain is verified, without needing a code change.
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Idraxiom Website <contact@idraxiom.com>";
+//
+// NOTE: FROM and TO are intentionally different addresses. Some mail clients
+// (e.g. Apple Mail) label a message "Note to Self" whenever the From and To
+// headers are identical, which previously happened on every submission since
+// both defaulted to contact@idraxiom.com — making real customer inquiries
+// look like self-notes instead of new leads.
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Idraxiom Website <noreply@idraxiom.com>";
 const TO_EMAIL = process.env.RESEND_TO_EMAIL || "contact@idraxiom.com";
 
 export async function POST(request: Request) {
@@ -31,7 +37,7 @@ export async function POST(request: Request) {
       from: FROM_EMAIL,
       to: TO_EMAIL,
       replyTo: email,
-      subject: `New message from ${name}`,
+      subject: `📩 New contact form inquiry from ${name}`,
       text: `You have a new message from:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">
