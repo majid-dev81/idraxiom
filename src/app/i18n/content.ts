@@ -64,6 +64,12 @@ export const content = {
             "Processing and analyzing large datasets to uncover trends and drive data-informed decisions.",
           href: "/demo",
         },
+        {
+          title: "Websites & Systems for Small Businesses",
+          description:
+            "Custom websites and lightweight systems for shops and workshops — booking, invoicing, and simple online stores to help you manage and grow.",
+          href: "/#contact",
+        },
       ],
     },
     armlink: {
@@ -155,6 +161,12 @@ export const content = {
           description:
             "معالجة وتحليل مجموعات بيانات كبيرة لاكتشاف الأنماط واتخاذ قرارات مبنية على البيانات.",
           href: "/demo",
+        },
+        {
+          title: "مواقع وأنظمة للأعمال الصغيرة",
+          description:
+            "مواقع إلكترونية وأنظمة بسيطة لمحلك أو ورشتك — من نظام حجز وفوترة إلى متجر إلكتروني مبسّط، نساعدك تدير أعمالك وتنمو بسهولة.",
+          href: "/#contact",
         },
       ],
     },

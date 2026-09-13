@@ -18,6 +18,7 @@ import {
   ArrowRight,
   Boxes,
   Languages,
+  Globe,
 } from "lucide-react"; // IMPORTED: ArrowRight icon + ArmLink/Warehouse section icons
 import { LangProvider, useLang } from "./i18n/LangContext";
 
@@ -279,7 +280,7 @@ const TechnologiesSection = () => {
 // 5) Services Section
 const ServicesSection = () => {
   const { t } = useLang();
-  const icons = [PenTool, Network, Lightbulb, Database];
+  const icons = [PenTool, Network, Lightbulb, Database, Globe];
 
   return (
     <section id="services" className="py-24 bg-[#0D1117]">
